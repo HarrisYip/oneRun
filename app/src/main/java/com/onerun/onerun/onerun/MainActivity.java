@@ -81,7 +81,7 @@ public class MainActivity extends ActionBarActivity
         switch(position) {
             case 0:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, SpeechFragment.newInstance(position + 1))
+                        .replace(R.id.container,     WorkoutSetFragment.newInstance(position + 1))
                         .commit();
                 break;
             case 1:

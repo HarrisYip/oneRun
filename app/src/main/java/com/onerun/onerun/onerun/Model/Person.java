@@ -2,6 +2,7 @@ package com.onerun.onerun.onerun.Model;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.onerun.onerun.onerun.DataAccessHelper;
@@ -11,29 +12,41 @@ import com.onerun.onerun.onerun.DataAccessHelper;
  */
 public class Person {
     DataAccessHelper helper;
+    SQLiteDatabase writableDB = helper.getWritableDatabase();
+    SQLiteDatabase readableDB = helper.getReadableDatabase();
+
 
     public Person(Context context) {
         helper = new DataAccessHelper(context);
     }
 
     public long insertProfile(String name, int age, float weight, float height) {
-        SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(DataAccessHelper.NAME, name);
-        contentValues.put(DataAccessHelper.AGE, age);
-        contentValues.put(DataAccessHelper.WEIGHT, weight);
-        contentValues.put(DataAccessHelper.HEIGHT, height);
+        contentValues.put(helper.NAME, name);
+        contentValues.put(helper.AGE, age);
+        contentValues.put(helper.WEIGHT, weight);
+        contentValues.put(helper.HEIGHT, height);
 
         // returns negative id if error
-        long id = db.insert(DataAccessHelper.PERSON, null, contentValues);
+        long id = writableDB.insert(helper.PERSON, null, contentValues);
         return id;
     }
 
     public long deleteProfile(int id) {
-        SQLiteDatabase db = helper.getWritableDatabase();
-        String table = DataAccessHelper.PERSON;
-        String where = DataAccessHelper.UID + "=" + id;
-        long retId = db.delete(table, where, null);
+        String table = helper.PERSON;
+        String where = helper.UID + "=" + id;
+        long retId = writableDB.delete(table, where, null);
         return retId;
+    }
+
+    public PersonModel getProfile(int id) {
+        String where = helper.UID + "=" + id;
+        Cursor cursor = readableDB.query(helper.NAME, null, where, null, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        PersonModel person = new PersonModel(id, cursor.getString(1), Integer.parseInt(cursor.getString(2)), Float.parseFloat(cursor.getString(3)), Float.parseFloat(cursor.getString(4)));
+        return person;
     }
 }

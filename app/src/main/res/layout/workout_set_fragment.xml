@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Pace (min/km):"
+        android:id="@+id/pace"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="131dp"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/paceSet"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/pace"
+        android:layout_marginStart="20dp" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="START"
+        android:id="@+id/start"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Update Interval: "
+        android:id="@+id/updateInterval"
+        android:layout_below="@+id/paceSet"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="131dp"
+        android:layout_height="wrap_content"
+        android:inputType="time"
+        android:ems="10"
+        android:id="@+id/updateIntervalSet"
+        android:layout_alignTop="@+id/updateInterval"
+        android:layout_alignStart="@+id/paceSet" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Cadence"
+        android:id="@+id/cadence"
+        android:layout_below="@+id/updateIntervalSet"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="42dp" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="cadence Set"
+        android:id="@+id/cadenceSet"
+        android:layout_alignTop="@+id/cadence"
+        android:layout_alignStart="@+id/start" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="BPM: "
+        android:id="@+id/bpm"
+        android:layout_below="@+id/cadenceSet"
+        android:layout_alignParentStart="true"
+        android:visibility="invisible" />
+
+    <EditText
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/bpmSet"
+        android:layout_below="@+id/cadenceSet"
+        android:layout_toEndOf="@+id/cadence"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=""
+        android:id="@+id/newRun"
+        android:layout_above="@+id/start"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Ghost Run"
+        android:id="@+id/ghostRun"
+        android:layout_below="@+id/bpmSet"
+        android:layout_alignParentStart="true" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ghostRunSet"
+        android:id="@+id/ghostRunSet"
+        android:layout_alignTop="@+id/ghostRun"
+        android:layout_alignStart="@+id/cadenceSet" />
+
+</RelativeLayout>

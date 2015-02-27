@@ -12,7 +12,6 @@
         android:id="@+id/speak"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Speak"
-        android:onClick="speakText"/>
+        android:text="Speak"/>
 
 </LinearLayout>

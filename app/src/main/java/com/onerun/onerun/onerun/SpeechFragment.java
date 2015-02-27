@@ -30,10 +30,19 @@ public class SpeechFragment extends Fragment implements TextToSpeech.OnInitListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.speech_fragment,
+        final View view = inflater.inflate(R.layout.speech_fragment,
                 container, false);
 
         //Button speaker  = (Button)getView().findViewById(R.id.speak);
+        Button speakButton = (Button) view.findViewById(R.id.speak);
+        speakButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText myText = (EditText) view.findViewById(R.id.enter);
+                String myStr = myText.getText().toString();
+                tts.speak(myStr, tts.QUEUE_FLUSH, null);
+            }
+        });
         //speaker.setOnClickListener(this);
         //speaker.setEnabled(false);
 
@@ -55,18 +64,6 @@ public class SpeechFragment extends Fragment implements TextToSpeech.OnInitListe
                 startActivity(installTTSIntent);
             }
         }
-    }
-
-    //@Override
-    public void speakText(View v) {
-        EditText myText = (EditText) v.findViewById(R.id.enter);
-        String myStr = myText.getText().toString();
-        speak(myStr);
-    }
-
-    public void speak(String sentence) {
-        //tts.speak(sentence, tts.QUEUE_FLUSH, null, null);
-        tts.speak(sentence, tts.QUEUE_FLUSH, null);
     }
 
     @Override

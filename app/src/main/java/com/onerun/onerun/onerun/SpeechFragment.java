@@ -43,6 +43,7 @@ public class SpeechFragment extends Fragment implements TextToSpeech.OnInitListe
                 tts.speak(myStr, tts.QUEUE_FLUSH, null);
             }
         });
+
         //speaker.setOnClickListener(this);
         //speaker.setEnabled(false);
 

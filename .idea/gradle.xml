@@ -8,6 +8,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         <option name="gradleHome" value="C:\Program Files\Android\Android Studio\gradle\gradle-2.2.1" />
 =======
         <option name="gradleHome" value="C:\dev\Software\Android Studio\gradle\gradle-2.2.1" />
@@ -18,6 +19,9 @@
 =======
         <option name="gradleHome" value="C:\dev\Software\Android Studio\gradle\gradle-2.2.1" />
 >>>>>>> UI of Workout Set Screen
+=======
+        <option name="gradleHome" value="C:\dev\Software\Android Studio\gradle\gradle-2.2.1" />
+>>>>>>> TextToSpeech Fragment
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />

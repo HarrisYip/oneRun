@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.SimpleDateFormat;
+
 /**
  * Created by Jason on 15-02-27.
  */
@@ -35,7 +37,7 @@ public class DataAccessHelper extends SQLiteOpenHelper {
     public static final String LONGITUDE = "longitude";
     public static final String TIME = "time";
 
-    private static final String CREATE_MAP_TABLE = "CREATE TABLE " + MAP + " (" + MID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + RID + " INT, " + LATITUDE + " REAL, " + LONGITUDE + " REAL, " + TIME + " DATE);";
+    private static final String CREATE_MAP_TABLE = "CREATE TABLE " + MAP + " (" + MID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + RID + " INT, " + LATITUDE + " REAL, " + LONGITUDE + " REAL, " + TIME + " INT);";
     private static final String DROP_MAP_TABLE = "DROP TABLE IF EXISTS " + MAP;
 
     // Run Table
@@ -47,7 +49,7 @@ public class DataAccessHelper extends SQLiteOpenHelper {
     public static final String PACE = "pace";
     public static final String DISTANCE = "distance";
 
-    private static final String CREATE_RUN_TABLE = "CREATE TABLE " + RUN + " (" + RID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + PID + " INT, " + STARTTIME + " DATE, " + ENDTIME + " DATE, " + PACE + " REAL, " + DISTANCE + " REAL);";
+    private static final String CREATE_RUN_TABLE = "CREATE TABLE " + RUN + " (" + RID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + PID + " INT, " + STARTTIME + " INT, " + ENDTIME + " INT, " + PACE + " REAL, " + DISTANCE + " REAL);";
     private static final String DROP_RUN_TABLE = "DROP TABLE IF EXISTS " + RUN;
 
     public DataAccessHelper(Context context) {

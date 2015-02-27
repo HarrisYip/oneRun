@@ -12,11 +12,12 @@ public class MapModel {
     private float longitude;
     private Date time;
 
-    public MapModel(int id, int runid, float latitude, float longitude) {
+    public MapModel(int id, int runid, float latitude, float longitude, Date time) {
         this.id = id;
         this.runid = runid;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.time = time;
     }
 
     public int getId() {

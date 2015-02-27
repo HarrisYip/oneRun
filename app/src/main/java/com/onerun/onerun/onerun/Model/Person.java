@@ -41,7 +41,7 @@ public class Person {
 
     public PersonModel getProfile(int id) {
         String where = helper.PID + "=" + id;
-        Cursor cursor = readableDB.query(helper.NAME, null, where, null, null, null, null);
+        Cursor cursor = readableDB.query(helper.PERSON, null, where, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }

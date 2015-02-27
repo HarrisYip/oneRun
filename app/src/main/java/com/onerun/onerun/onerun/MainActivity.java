@@ -1,6 +1,7 @@
 package com.onerun.onerun.onerun;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.TextView;
 
 
@@ -51,9 +53,20 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+        switch(position) {
+            case 0:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container,     PlaceholderFragment.newInstance(position + 1))
+                        .commit();
+                break;
+            case 1:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, SpeechFragment.newInstance(position + 1))
+                        .commit();
+                break;
+            case 2:
+                break;
+        }
     }
 
     public void onSectionAttached(int number) {
@@ -144,6 +157,13 @@ public class MainActivity extends ActionBarActivity
             ((MainActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
+    }
+
+    public void speakText(View v) {
+        EditText myText = (EditText) v.findViewById(R.id.enter);
+        String myStr = myText.getText().toString();
+        //SpeechFragment frag = (SpeechFragment) getFragmentManager().getFragment(Bundle)
+        //speak(myStr);
     }
 
 }

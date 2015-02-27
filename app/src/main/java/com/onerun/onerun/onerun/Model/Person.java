@@ -34,13 +34,13 @@ public class Person {
 
     public long deleteProfile(int id) {
         String table = helper.PERSON;
-        String where = helper.UID + "=" + id;
+        String where = helper.PID + "=" + id;
         long retId = writableDB.delete(table, where, null);
         return retId;
     }
 
     public PersonModel getProfile(int id) {
-        String where = helper.UID + "=" + id;
+        String where = helper.PID + "=" + id;
         Cursor cursor = readableDB.query(helper.NAME, null, where, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();

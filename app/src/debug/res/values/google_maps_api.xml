@@ -1,0 +1,18 @@
+<resources>
+    <string name="google_maps_key_instructions" templateMergeStrategy="replace"><!--
+
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=A3:75:61:0C:38:CB:2D:E2:61:27:E4:7D:0C:E2:11:B4:88:FC:EC:68%3Bcom.onerun.onerun.onerun
+
+    You can also add your credentials to an existing key, using this line:
+    A3:75:61:0C:38:CB:2D:E2:61:27:E4:7D:0C:E2:11:B4:88:FC:EC:68;com.onerun.onerun.onerun
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    --></string>
+
+    <string name="google_maps_key" templateMergeStrategy="preserve">AIzaSyCxmGakBKMksLYVjAKJh3kwrPyah0bLOq4</string>
+</resources>

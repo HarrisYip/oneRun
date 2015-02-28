@@ -60,9 +60,12 @@ public class MainActivity extends ActionBarActivity
         ToastMessage.message(this, "setting data db");
         personDataSource = new PersonDataSource(this);
         personDataSource.open();
-        long row = personDataSource.insertProfile("Jason Park", 10, 10.10, 10.10);
+        long row = personDataSource.insertProfile("Jason Park", 24, 65, 171);
         Person jason = personDataSource.getPerson((int)row);
         ToastMessage.message(this, "Who? " + jason.getName());
+        ToastMessage.message(this, "Age? " + jason.getAge());
+        ToastMessage.message(this, "Weight? " + jason.getWeight());
+        ToastMessage.message(this, "Height? " + jason.getHeight());
         personDataSource.close();
     }
 

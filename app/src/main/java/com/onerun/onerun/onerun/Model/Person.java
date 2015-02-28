@@ -10,7 +10,7 @@ public class Person {
     private double height;
     private double weight;
 
-    public Person(int id, String name, int age, double height, double weight) {
+    public Person(int id, String name, int age, double weight, double height) {
         this.id = id;
         this.name = name;
         this.age = age;

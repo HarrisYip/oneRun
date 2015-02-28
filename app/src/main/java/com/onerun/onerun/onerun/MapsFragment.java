@@ -45,8 +45,8 @@ public class MapsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         if (mMap != null) {
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .remove(getActivity().getSupportFragmentManager().findFragmentById(R.id.map)).commit();
+            getFragmentManager().beginTransaction()
+                    .remove(getChildFragmentManager().findFragmentById(R.id.map)).commit();
             mMap = null;
         }
     }

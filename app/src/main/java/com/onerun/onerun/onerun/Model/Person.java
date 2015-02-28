@@ -7,10 +7,10 @@ public class Person {
     private int id;
     private String name;
     private int age;
-    private float height;
-    private float weight;
+    private double height;
+    private double weight;
 
-    public Person(int id, String name, int age, float height, float weight) {
+    public Person(int id, String name, int age, double height, double weight) {
         this.id = id;
         this.name = name;
         this.age = age;
@@ -43,19 +43,19 @@ public class Person {
         this.age = age;
     }
 
-    public float getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(float height) {
+    public void setHeight(double height) {
         this.height = height;
     }
 
-    public float getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(float weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 }

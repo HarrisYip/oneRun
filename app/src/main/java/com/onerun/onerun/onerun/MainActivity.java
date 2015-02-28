@@ -18,6 +18,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.onerun.onerun.onerun.Model.MapDataSource;
+import com.onerun.onerun.onerun.Model.Person;
+import com.onerun.onerun.onerun.Model.PersonDataSource;
+import com.onerun.onerun.onerun.Model.RunDataSource;
+
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -32,6 +37,11 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+    // all datasource connections
+    MapDataSource mapDataSource;
+    PersonDataSource personDataSource;
+    RunDataSource runDataSource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +55,15 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        // testing db
+        ToastMessage.message(this, "setting data db");
+        personDataSource = new PersonDataSource(this);
+        personDataSource.open();
+        long row = personDataSource.insertProfile("Jason Park", 10, 10.10, 10.10);
+        Person jason = personDataSource.getPerson((int)row);
+        ToastMessage.message(this, "Who? " + jason.getName());
+        personDataSource.close();
     }
 
     @Override

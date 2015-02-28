@@ -31,7 +31,7 @@ public class MapDataSource {
         dbHelper.close();
     }
 
-    public long insertMap(int runid, float latitude, float longitude, Date time) {
+    public long insertMap(int runid, double latitude, double longitude, Date time) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(dbHelper.RID, runid);
         contentValues.put(dbHelper.LATITUDE, latitude);
@@ -68,8 +68,8 @@ public class MapDataSource {
         int timeIndex = cursor.getColumnIndexOrThrow(dbHelper.TIME);
 
         int mRid = Integer.parseInt(cursor.getString(ridIndex));
-        float mLatitude = Float.parseFloat(cursor.getString(latitudeIndex));
-        float mLongitude = Float.parseFloat(cursor.getString(longitudeIndex));
+        double mLatitude = Double.parseDouble(cursor.getString(latitudeIndex));
+        double mLongitude = Double.parseDouble(cursor.getString(longitudeIndex));
         long mMilliseconds = Long.parseLong(cursor.getString(timeIndex));
         Date mDate = new Date(mMilliseconds);
 

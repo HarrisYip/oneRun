@@ -10,10 +10,10 @@ public class Run {
     private int personid;
     private Date starttime;
     private Date endtime;
-    private float pace;
-    private float distance;
+    private double pace;
+    private double distance;
 
-    public Run(int id, int personid, Date starttime, Date endtime, float pace, float distance) {
+    public Run(int id, int personid, Date starttime, Date endtime, double pace, double distance) {
         this.id = id;
         this.personid = personid;
         this.starttime = starttime;
@@ -54,19 +54,19 @@ public class Run {
         this.endtime = endtime;
     }
 
-    public float getPace() {
+    public double getPace() {
         return pace;
     }
 
-    public void setPace(float pace) {
+    public void setPace(double pace) {
         this.pace = pace;
     }
 
-    public float getDistance() {
+    public double getDistance() {
         return distance;
     }
 
-    public void setDistance(float distance) {
+    public void setDistance(double distance) {
         this.distance = distance;
     }
 }

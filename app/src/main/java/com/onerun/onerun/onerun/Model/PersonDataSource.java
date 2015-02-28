@@ -13,8 +13,8 @@ import com.onerun.onerun.onerun.DataAccessHelper;
  */
 public class PersonDataSource {
     DataAccessHelper dbHelper;
-    SQLiteDatabase writableDB = dbHelper.getWritableDatabase();
-    SQLiteDatabase readableDB = dbHelper.getReadableDatabase();
+    SQLiteDatabase writableDB;
+    SQLiteDatabase readableDB;
 
     public PersonDataSource(Context context) {
         dbHelper = new DataAccessHelper(context);
@@ -29,7 +29,7 @@ public class PersonDataSource {
         dbHelper.close();
     }
 
-    public long insertProfile(String name, int age, float weight, float height) {
+    public long insertProfile(String name, int age, double weight, double height) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(dbHelper.NAME, name);
         contentValues.put(dbHelper.AGE, age);
@@ -48,7 +48,7 @@ public class PersonDataSource {
         return retId;
     }
 
-    public Person getProfile(int id) {
+    public Person getPerson(int id) {
         String where = dbHelper.PID + "=" + id;
         Cursor cursor = readableDB.query(dbHelper.PERSON, null, where, null, null, null, null);
         if (cursor != null) {
@@ -63,8 +63,8 @@ public class PersonDataSource {
 
         String pName = cursor.getString(nameIndex);
         int pAge = Integer.parseInt(cursor.getString(ageIndex));
-        float pWeight = Float.parseFloat(cursor.getString(weightIndex));
-        float pHeight = Float.parseFloat(cursor.getString(heightIndex));
+        double pWeight = Double.parseDouble(cursor.getString(weightIndex));
+        double pHeight = Double.parseDouble(cursor.getString(heightIndex));
 
         Person person = new Person(id, pName, pAge, pWeight, pHeight);
 

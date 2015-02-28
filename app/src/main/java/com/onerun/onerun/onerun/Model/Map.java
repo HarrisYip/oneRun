@@ -8,11 +8,11 @@ import java.util.Date;
 public class Map {
     private int id;
     private int runid;
-    private float latitude;
-    private float longitude;
+    private double latitude;
+    private double longitude;
     private Date time;
 
-    public Map(int id, int runid, float latitude, float longitude, Date time) {
+    public Map(int id, int runid, double latitude, double longitude, Date time) {
         this.id = id;
         this.runid = runid;
         this.latitude = latitude;
@@ -36,19 +36,19 @@ public class Map {
         this.runid = runid;
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(float latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(float longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 

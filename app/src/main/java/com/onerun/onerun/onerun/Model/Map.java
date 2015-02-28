@@ -3,6 +3,7 @@ package com.onerun.onerun.onerun.Model;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.onerun.onerun.onerun.DataAccessHelper;
@@ -13,29 +14,38 @@ import java.util.Date;
  * Created by Jason on 15-02-27.
  */
 public class Map {
-    DataAccessHelper helper;
-    SQLiteDatabase writableDB = helper.getWritableDatabase();
-    SQLiteDatabase readableDB = helper.getReadableDatabase();
+    DataAccessHelper dbHelper;
+    SQLiteDatabase writableDB;
+    SQLiteDatabase readableDB;
 
     public Map(Context context) {
-        helper = new DataAccessHelper(context);
+        dbHelper = new DataAccessHelper(context);
+    }
+
+    public void open() throws SQLException {
+        writableDB = dbHelper.getWritableDatabase();
+        readableDB = dbHelper.getReadableDatabase();
+    }
+
+    public void close() {
+        dbHelper.close();
     }
 
     public long insertMap(int runid, float latitude, float longitude, Date time) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(helper.RID, runid);
-        contentValues.put(helper.LATITUDE, latitude);
-        contentValues.put(helper.LONGITUDE, longitude);
-        contentValues.put(helper.TIME, time.getTime());
+        contentValues.put(dbHelper.RID, runid);
+        contentValues.put(dbHelper.LATITUDE, latitude);
+        contentValues.put(dbHelper.LONGITUDE, longitude);
+        contentValues.put(dbHelper.TIME, time.getTime());
 
         // return negative id if error
-        long id = writableDB.insert(helper.MAP, null, contentValues);
+        long id = writableDB.insert(dbHelper.MAP, null, contentValues);
         return id;
     }
 
     public long deleteMap(int mid) {
-        String table = helper.MAP;
-        String where = helper.MID + "=" + mid;
+        String table = dbHelper.MAP;
+        String where = dbHelper.MID + "=" + mid;
 
         // return negative id on error
         long retId = writableDB.delete(table, where, null);
@@ -43,8 +53,8 @@ public class Map {
     }
 
     public MapModel getMap(int mid) {
-        String where = helper.MID + "=" + mid;
-        Cursor cursor = readableDB.query(helper.MAP, null, where, null, null, null, null);
+        String where = dbHelper.MID + "=" + mid;
+        Cursor cursor = readableDB.query(dbHelper.MAP, null, where, null, null, null, null);
 
         // get first
         if (cursor != null) {
@@ -52,13 +62,22 @@ public class Map {
         }
 
         // create MapModel object
-        int runid = cursor.getColumnIndexOrThrow(helper.RID);
-        float latitude = cursor.getColumnIndexOrThrow(helper.LATITUDE);
-        float longitude = cursor.getColumnIndexOrThrow(helper.LONGITUDE);
-        long timeInMil = cursor.getColumnIndexOrThrow(helper.TIME);
-        Date date = new Date(timeInMil);
+        int ridIndex = cursor.getColumnIndexOrThrow(dbHelper.RID);
+        int latitudeIndex = cursor.getColumnIndexOrThrow(dbHelper.LATITUDE);
+        int longitudeIndex = cursor.getColumnIndexOrThrow(dbHelper.LONGITUDE);
+        int timeIndex = cursor.getColumnIndexOrThrow(dbHelper.TIME);
 
-        MapModel mapModel = new MapModel(mid, runid, latitude, longitude, date);
+        int mRid = Integer.parseInt(cursor.getString(ridIndex));
+        float mLatitude = Float.parseFloat(cursor.getString(latitudeIndex));
+        float mLongitude = Float.parseFloat(cursor.getString(longitudeIndex));
+        long mMilliseconds = Long.parseLong(cursor.getString(timeIndex));
+        Date mDate = new Date(mMilliseconds);
+
+        MapModel mapModel = new MapModel(mid, mRid, mLatitude, mLongitude, mDate);
+
+        // close cursor
+        cursor.close();
+
         return mapModel;
     }
 }

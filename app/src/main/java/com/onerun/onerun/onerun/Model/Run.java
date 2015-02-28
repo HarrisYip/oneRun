@@ -53,13 +53,25 @@ public class Run {
         }
 
         // create RunModel object
-        int pid = cursor.getColumnIndexOrThrow(helper.PID);
-        long starttimeInMil = cursor.getColumnIndexOrThrow(helper.STARTTIME);
-        long endtimeInMil = cursor.getColumnIndexOrThrow(helper.ENDTIME);
-        float pace = cursor.getColumnIndexOrThrow(helper.PACE);
-        float distance = cursor.getColumnIndexOrThrow(helper.DISTANCE);
+        int pidIndex = cursor.getColumnIndexOrThrow(helper.PID);
+        int starttimeIndex = cursor.getColumnIndexOrThrow(helper.STARTTIME);
+        int endtimeIndex = cursor.getColumnIndexOrThrow(helper.ENDTIME);
+        int paceIndex = cursor.getColumnIndexOrThrow(helper.PACE);
+        int distanceIndex = cursor.getColumnIndexOrThrow(helper.DISTANCE);
 
-        RunModel runModel = new RunModel(rid, pid, new Date(starttimeInMil), new Date(endtimeInMil), pace, distance);
+        int rPid = Integer.parseInt(cursor.getString(pidIndex));
+        long rStarttimeMilliseconds = Long.parseLong(cursor.getString(starttimeIndex));
+        Date rStarttimeDate = new Date(rStarttimeMilliseconds);
+        long rEndtimeMilliseconds = Long.parseLong(cursor.getString(endtimeIndex));
+        Date rEndtimeDate = new Date(rEndtimeMilliseconds);
+        float rPace = Float.parseFloat(cursor.getString(paceIndex));
+        float rDistance = Float.parseFloat(cursor.getString(distanceIndex));
+
+        RunModel runModel = new RunModel(rid, rPid, rStarttimeDate, rEndtimeDate, rPace, rDistance);
+
+        // close cursor
+        cursor.close();
+
         return runModel;
     }
 }

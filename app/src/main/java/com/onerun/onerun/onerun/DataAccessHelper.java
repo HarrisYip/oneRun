@@ -35,7 +35,7 @@ public class DataAccessHelper extends SQLiteOpenHelper {
     public static final String RID = "_runid";
     public static final String LATITUDE = "latitude";
     public static final String LONGITUDE = "longitude";
-    public static final String TIME = "time";
+    public static final String TIME = "time"; // long milliseconds
 
     private static final String CREATE_MAP_TABLE = "CREATE TABLE " + MAP + " (" + MID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + RID + " INT, " + LATITUDE + " REAL, " + LONGITUDE + " REAL, " + TIME + " INT);";
     private static final String DROP_MAP_TABLE = "DROP TABLE IF EXISTS " + MAP;
@@ -44,8 +44,8 @@ public class DataAccessHelper extends SQLiteOpenHelper {
     public static final String RUN = "run";
     // RID already declared at Map Table
     // PID already declared at Person Table
-    public static final String STARTTIME = "starttime";
-    public static final String ENDTIME = "endtime";
+    public static final String STARTTIME = "starttime"; // long milliseconds
+    public static final String ENDTIME = "endtime"; // long milliseconds
     public static final String PACE = "pace";
     public static final String DISTANCE = "distance";
 

@@ -2,12 +2,10 @@ package com.onerun.onerun.onerun;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.location.Location;
-import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,8 +16,6 @@ import android.widget.TextView;
 
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -30,26 +26,23 @@ import com.onerun.onerun.onerun.Model.RunDataSource;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 
-public class Running extends Activity implements com.google.android.gms.location.LocationListener, GoogleApiClient.ConnectionCallbacks,
+public class Running extends Activity implements
+        LocationListener,
+        GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener{
-    TextView tView;
-    TextView milliTextView;
-    TextView secondsTextView;
-    TextView minutesTextView;
-    TextView hoursTextView;
-    private Timer t;
-    private int hours = 0;
-    private int minutes = 0;
-    private int seconds = 0;
-    private int milli = 0;
-    double latitude;
-    double longitude;
-    boolean close;
+
+    TextView mLocationTextView;
+    TextView mMilliTextView;
+    TextView mSecondsTextView;
+    TextView mMinutesTextView;
+    TextView mHoursTextView;
+    private Timer mTimer;
+    private int mHours = 0;
+    private int mMinutes = 0;
+    private int mSeconds = 0;
+    private int mMilli = 0;
     int pace = 60;
     long runid;
 
@@ -60,11 +53,85 @@ public class Running extends Activity implements com.google.android.gms.location
     RunDataSource rundb;
     MapDataSource mapdb;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        createLocationRequest();
+        setContentView(R.layout.activity_running);
+        setupView();
+
+        setupTimer();
+
+        setupDatabases();
+
+    }
+
+    private void setupDatabases() {
+        rundb = new RunDataSource(this);
+        mapdb = new MapDataSource(this);
+
+        rundb.open();
+        mapdb.open();
+
+        runid = rundb.insertRun(1,new Date(),new Date(),pace,0);
+
+        rundb.close();
+    }
+
+    private void setupTimer() {
+        mTimer = new Timer();
+
+        mTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMilliTextView.setText(mMilli - 10 >= 0 ? mMilli + "" : "0" + mMilli);
+                        mSecondsTextView.setText(mSeconds - 10 >= 0 ? mSeconds + "" : "0" + mSeconds);
+                        mMinutesTextView.setText(mMinutes - 10 >= 0 ? mMinutes + "" : "0" + mMinutes);
+                        mHoursTextView.setText(mHours - 10 >= 0 ? mHours + "" : "0" + mHours);
+                        mMilli++;
+                        if (mMilli == 100) {
+                            mMilli = 0;
+                            mSeconds++;
+                            if (mSeconds == 60) {
+                                mSeconds = 0;
+                                mMinutes++;
+                                if (mMinutes == 60) {
+                                    mMinutes = 0;
+                                    mHours++;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }, 10, 10);
+    }
+
+    private void setupView() {
+        mLocationTextView = (TextView) findViewById(R.id.tView);
+        mMilliTextView = (TextView) findViewById(R.id.timeMilliView);
+        mSecondsTextView = (TextView) findViewById(R.id.timeSecsView);
+        mMinutesTextView = (TextView) findViewById(R.id.timeMinsView);
+        mHoursTextView = (TextView) findViewById(R.id.timeHoursView);
+
+        Button start = (Button) findViewById(R.id.sumbit);
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                finish();
+            }
+        });
+    }
+
     protected void createLocationRequest() {
-        mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10);
-        mLocationRequest.setFastestInterval(5);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest = LocationRequest.create()
+                            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                            .setInterval(10000)
+                            .setFastestInterval(1000);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
     }
@@ -72,16 +139,8 @@ public class Running extends Activity implements com.google.android.gms.location
     @Override
     protected void onResume() {
         super.onResume();
-        if(mGoogleApiClient != null){
+        if(mGoogleApiClient != null && !mGoogleApiClient.isConnected() && !mGoogleApiClient.isConnecting()){
             mGoogleApiClient.connect();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if(mGoogleApiClient != null && mGoogleApiClient.isConnected()){
-            mGoogleApiClient.disconnect();
         }
     }
 
@@ -92,149 +151,6 @@ public class Running extends Activity implements com.google.android.gms.location
             mGoogleApiClient.connect();
         }
     }
-
-    private boolean servicesAvailable() {
-
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-
-        if (ConnectionResult.SUCCESS == resultCode) {
-            return true;
-        }
-        else {
-            GooglePlayServicesUtil.getErrorDialog(resultCode, this, 0).show();
-            return false;
-        }
-    }
-
-    GPSTracker tracker;
-
-    @Override
-    public void onConnected(Bundle dataBundle) {
-        // TODO Auto-generated method stub
-        // Get first reading. Get additional location updates if necessary
-        if (servicesAvailable()) {
-            // Get best last location measurement meeting criteria
-            mBestReading = bestLastKnownLocation(500.0f, 10000);
-
-            if (null == mBestReading
-                    || mBestReading.getAccuracy() >500.0f)
-            {
-
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
-                // Schedule a runnable to unregister location listeners
-                Executors.newScheduledThreadPool(1).schedule(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, Running.this);
-                    }
-
-                }, 1000*60, TimeUnit.MILLISECONDS);
-            }
-        }
-
-        new loop().execute();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-
-    private Location bestLastKnownLocation(float minAccuracy, long minTime) {
-        Location bestResult = null;
-        float bestAccuracy = Float.MAX_VALUE;
-        long bestTime = Long.MIN_VALUE;
-
-        // Get the best most recent location currently available
-        Location mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        Log.d("CURRENT LOCATION", mCurrentLocation.getLatitude() + ", " + mCurrentLocation.getLongitude());
-        if (mCurrentLocation != null) {
-            float accuracy = mCurrentLocation.getAccuracy();
-            long time = mCurrentLocation.getTime();
-
-            if (accuracy < bestAccuracy) {
-                bestResult = mCurrentLocation;
-                bestAccuracy = accuracy;
-                bestTime = time;
-            }
-        }
-
-        // Return best reading or null
-        if (bestAccuracy > minAccuracy || bestTime < minTime) {
-            return null;
-        }
-        else {
-            return bestResult;
-        }
-    }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        createLocationRequest();
-        close = false;
-        setContentView(R.layout.activity_running);
-        tView = (TextView) findViewById(R.id.tView);
-        milliTextView = (TextView) findViewById(R.id.timeMilliView);
-        secondsTextView = (TextView) findViewById(R.id.timeSecsView);
-        minutesTextView = (TextView) findViewById(R.id.timeMinsView);
-        hoursTextView = (TextView) findViewById(R.id.timeHoursView);
-
-        tracker = new GPSTracker(getApplicationContext());
-        rundb = new RunDataSource(this);
-        mapdb = new MapDataSource(this);
-
-        rundb.open();
-        mapdb.open();
-
-        runid = rundb.insertRun(1,new Date(),new Date(),pace,0);
-
-        rundb.close();
-
-
-
-
-        Button start = (Button) findViewById(R.id.sumbit);
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        t = new Timer();
-        t.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread( new Runnable() {
-                    @Override
-                    public void run() {
-                        milliTextView.setText(milli - 10 >= 0 ? milli + "" : "0" + milli);
-                        secondsTextView.setText(seconds - 10 >= 0 ? seconds + "" : "0" + seconds);
-                        minutesTextView.setText(minutes - 10 >= 0 ? minutes + "" : "0" + minutes);
-                        hoursTextView.setText(hours - 10 >= 0 ? hours + "" : "0" + hours);
-                        milli++;
-                        if (milli == 100) {
-                            milli = 0;
-                            seconds++;
-                            if (seconds == 60) {
-                                seconds = 0;
-                                minutes++;
-                                if (minutes == 60) {
-                                    minutes = 0;
-                                    hours++;
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        }, 10, 10);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -261,7 +177,10 @@ public class Running extends Activity implements com.google.android.gms.location
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        close = true;
+        if (mGoogleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mGoogleApiClient.disconnect();
+        }
         mapdb.close();
     }
 
@@ -276,7 +195,6 @@ public class Running extends Activity implements com.google.android.gms.location
 
             public void onClick(DialogInterface dialog, int which) {
                 // Do nothing but close the dialog
-                close = true;
                 backPressed();
                 dialog.dismiss();
                 mapdb.close();
@@ -289,7 +207,6 @@ public class Running extends Activity implements com.google.android.gms.location
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Do nothing
-                close = false;
                 dialog.dismiss();
             }
         });
@@ -303,55 +220,55 @@ public class Running extends Activity implements com.google.android.gms.location
         super.onBackPressed();
     }
 
+    private void handleLocationChanged(){
+        final double latitude = mBestReading.getLatitude();
+        final double longitude = mBestReading.getLongitude();
+        mapdb.insertMap((int)runid,latitude,longitude,new Date());
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mLocationTextView.setText(latitude + "," + longitude);
+            }
+        });
+    }
+
     @Override
     public void onLocationChanged(Location location) {
         if (null == mBestReading || location.getAccuracy() < mBestReading.getAccuracy()) {
             mBestReading = location;
-
-            if (mBestReading.getAccuracy() < 500.0f) {
-                LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-            }
+            handleLocationChanged();
         }
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnected(Bundle dataBundle) {
+        mBestReading = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-    }
-
-    private class loop extends AsyncTask<Void, Void, Void> {
-        int count = 0;
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            //while(count < 10) {
-            try {
-                while(true) {
-                    if(close){break;}
-                    mBestReading = bestLastKnownLocation(500.0f, 10000);
-                    latitude = mBestReading.getLatitude();
-                    longitude = mBestReading.getLongitude();
-                    mapdb.insertMap((int)runid,latitude,longitude,new Date());
-                    // \n is for new line
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            //ToastMessage.message(getApplicationContext(),latitude + "," + longitude);
-                            tView.setText(latitude + "," + longitude);
-
-                        }
-                    });
-                    Thread.sleep(10);
-                }
-            } catch (Exception e) {
-
-            }
-            //}
-            return null;
+        if (null == mBestReading){
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        } else {
+            handleLocationChanged();
         }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
 
     }
 
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        if (connectionResult.hasResolution()) {
+            try {
+                // Start an Activity that tries to resolve the error
+                connectionResult.startResolutionForResult(this, 9000);
+            } catch (IntentSender.SendIntentException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.i("ERROR", "Location services connection failed with code " + connectionResult.getErrorCode());
+        }
+    }
 }
     

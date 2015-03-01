@@ -11,15 +11,19 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
-    <EditText
-        android:layout_width="131dp"
+    <Spinner
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
         android:id="@+id/paceSet"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/pace"
-        android:layout_marginStart="20dp" />
+        android:layout_toEndOf="@+id/pace" />
+
+    <Spinner
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/paceSet2"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/paceSet" />
 
     <Button
         android:layout_width="150dp"
@@ -38,14 +42,19 @@
         android:layout_below="@+id/paceSet"
         android:layout_alignParentStart="true" />
 
-    <EditText
-        android:layout_width="131dp"
+    <Spinner
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:inputType="time"
-        android:ems="10"
         android:id="@+id/updateIntervalSet"
         android:layout_alignTop="@+id/updateInterval"
         android:layout_alignStart="@+id/paceSet" />
+
+    <Spinner
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/updateIntervalSet2"
+        android:layout_alignTop="@+id/updateIntervalSet"
+        android:layout_toEndOf="@+id/updateIntervalSet" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -73,7 +82,7 @@
         android:id="@+id/bpm"
         android:layout_below="@+id/cadenceSet"
         android:layout_alignParentStart="true"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <EditText
         android:layout_width="100dp"
@@ -83,7 +92,7 @@
         android:id="@+id/bpmSet"
         android:layout_below="@+id/cadenceSet"
         android:layout_toEndOf="@+id/cadence"
-        android:visibility="invisible" />
+        android:visibility="gone" />
 
     <TextView
         android:layout_width="200dp"

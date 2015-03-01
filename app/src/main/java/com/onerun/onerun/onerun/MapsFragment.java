@@ -69,7 +69,7 @@ public class MapsFragment extends Fragment {
 //            for (int i = 0; i < 4; i++) {
 //                mapDB.insertMap(0, tempLat[i], tempLong[i], new Date(10000));
 //            }
-            Map myMap[] = mapDB.getAllCoorForRun(0);
+            Map myMap[] = mapDB.getAllCoorForRun(runId);
             mapDB.close();
             latArray = new double[myMap.length];
             longArray = new double[myMap.length];

@@ -64,7 +64,7 @@ public class Running extends Activity {
         rundb.open();
         mapdb.open();
 
-        runid = rundb.insertRun(1,new Date(),new Date(),pace,0);
+        runid = rundb.insertRun(1, new Date(),new Date(),pace,0);
 
         rundb.close();
 
@@ -193,7 +193,7 @@ public class Running extends Activity {
 
                             latitude = l.getLatitude();
                             longitude = l.getLongitude();
-                            mapdb.insertMap((int)runid,longitude,latitude,new Date());
+                            mapdb.insertMap((int)runid, latitude, longitude, new Date());
                             // \n is for new line
 
                         }else{

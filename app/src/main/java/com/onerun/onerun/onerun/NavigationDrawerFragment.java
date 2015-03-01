@@ -247,10 +247,15 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
-        if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
+//        if (item.getItemId() == R.id.action_example) {
+//            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
+//            return true;
+//        }
+
+//        if (item.getItemId() == R.id.edit_profile) {
+//            mCallbacks.onActionBarItemSelected(item.getItemId());
+//        }
+        mCallbacks.onActionBarItemSelected(item.getItemId());
 
         return super.onOptionsItemSelected(item);
     }
@@ -278,5 +283,6 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+        void onActionBarItemSelected(int position);
     }
 }

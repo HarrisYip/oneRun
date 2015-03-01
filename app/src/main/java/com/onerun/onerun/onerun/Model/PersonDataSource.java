@@ -73,4 +73,23 @@ public class PersonDataSource {
 
         return person;
     }
+
+    public boolean updatePerson(Person newPerson) {
+        boolean ret = false;
+        String table = dbHelper.PERSON;
+        String where = dbHelper.PID + "=" + newPerson.getId();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(dbHelper.PID, newPerson.getId());
+        contentValues.put(dbHelper.NAME, newPerson.getName());
+        contentValues.put(dbHelper.AGE, newPerson.getAge());
+        contentValues.put(dbHelper.WEIGHT, newPerson.getWeight());
+        contentValues.put(dbHelper.HEIGHT, newPerson.getHeight());
+
+        int status = writableDB.update(table, contentValues, where, null);
+        if(status == 1) {
+            ret = true;
+        }
+        return ret;
+    }
 }

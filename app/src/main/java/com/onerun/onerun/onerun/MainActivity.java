@@ -1,15 +1,12 @@
 package com.onerun.onerun.onerun;
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,12 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
+
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.onerun.onerun.onerun.Model.MapDataSource;
-import com.onerun.onerun.onerun.Model.Person;
 import com.onerun.onerun.onerun.Model.PersonDataSource;
 import com.onerun.onerun.onerun.Model.RunDataSource;
 
@@ -94,7 +89,27 @@ public class MainActivity extends ActionBarActivity
                         .commit();
                 break;
             case 2:
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new ProfileFragment())
+                        .commit();
                 break;
+        }
+    }
+
+    @Override
+    public void onActionBarItemSelected(int position) {
+        switch(position) {
+            case (R.id.edit_profile):
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.container, new ProfileEditActivity())
+//                        .commit();
+
+                // intent = new intent
+                // getactivity.getapplicationcontenx
+                // profileeditactivity.class
+                // getactivity.startActivity(intent)
+                Intent intent = new Intent(this, ProfileEditActivity.class);
+                startActivity(intent);
         }
     }
 

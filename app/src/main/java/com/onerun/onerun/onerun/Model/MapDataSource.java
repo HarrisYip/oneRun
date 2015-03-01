@@ -62,22 +62,49 @@ public class MapDataSource {
         }
 
         // create MapModel object
+        Map map = getSingleMap(cursor);
+
+        // close cursor
+        cursor.close();
+
+        return map;
+    }
+
+    private Map getSingleMap(Cursor cursor) {
+        int midIndex = cursor.getColumnIndex(dbHelper.MID);
         int ridIndex = cursor.getColumnIndexOrThrow(dbHelper.RID);
         int latitudeIndex = cursor.getColumnIndexOrThrow(dbHelper.LATITUDE);
         int longitudeIndex = cursor.getColumnIndexOrThrow(dbHelper.LONGITUDE);
         int timeIndex = cursor.getColumnIndexOrThrow(dbHelper.TIME);
 
+        int mId = Integer.parseInt(cursor.getString(midIndex));
         int mRid = Integer.parseInt(cursor.getString(ridIndex));
         double mLatitude = Double.parseDouble(cursor.getString(latitudeIndex));
         double mLongitude = Double.parseDouble(cursor.getString(longitudeIndex));
         long mMilliseconds = Long.parseLong(cursor.getString(timeIndex));
         Date mDate = new Date(mMilliseconds);
 
-        Map map = new Map(mid, mRid, mLatitude, mLongitude, mDate);
+        return new Map(mId, mRid, mLatitude, mLongitude, mDate);
+    }
 
-        // close cursor
+    public Map[] getAllCoorForRun(int rId) {
+        String where = dbHelper.RID + "=" + rId;
+        Cursor cursor = readableDB.query(dbHelper.MAP, null, where, null, null, null, null);
+
+        int cursorSize = cursor.getCount();
+        Map coordinates[] = new Map[cursorSize];
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            for (int i = 0; i < cursorSize; i++) {
+                coordinates[i] = getSingleMap(cursor);
+                cursor.moveToNext();
+            }
+        }
+
         cursor.close();
 
-        return map;
+
+        return coordinates;
     }
 }

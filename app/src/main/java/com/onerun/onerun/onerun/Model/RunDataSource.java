@@ -84,4 +84,17 @@ public class RunDataSource {
 
         return run;
     }
+
+    public int getLastRun(){
+        String query = ("SELECT MAX(" + dbHelper.RID + ") FROM " + dbHelper.RUN);
+        Cursor cursor = readableDB.rawQuery(query, null);
+        int lastRun = -1;
+        if (cursor != null) {
+            cursor.moveToFirst();
+            lastRun = cursor.getInt(0);
+        }
+
+        return lastRun;
+
+    }
 }

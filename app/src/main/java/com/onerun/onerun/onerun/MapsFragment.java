@@ -17,12 +17,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.onerun.onerun.onerun.Model.Map;
+import com.onerun.onerun.onerun.Model.MapDataSource;
+import com.onerun.onerun.onerun.Model.RunDataSource;
+
+import java.util.Date;
 
 public class MapsFragment extends Fragment {
 
     private static GoogleMap mMap;
-    private double latArray[] = {43.473209, 43.471870, 43.469507, 43.468697, 43.467911, 43.466603, 43.467335, 43.469173};
-    private double longArray[] = {-80.541670, -80.540039, -80.539275, -80.540155, -80.540455, -80.541171, -80.543489, -80.543961};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,6 +54,34 @@ public class MapsFragment extends Fragment {
     }
 
     private void setUpMap(){
+        double latArray[];
+        double longArray[];
+        RunDataSource runDB = new RunDataSource(getActivity());
+        runDB.open();
+//        runDB.insertRun(0, new Date(10000000), new Date(200000000), 10, 10);
+        int runId = runDB.getLastRun();
+        runDB.close();
+        if (runId > 0) {
+            MapDataSource mapDB = new MapDataSource(getActivity());
+            mapDB.open();
+//            double tempLat[] = {43.473209, 43.471870, 43.469507, 43.468697};
+//            double tempLong[] = {-80.541670, -80.540039, -80.539275, -80.540155};
+//            for (int i = 0; i < 4; i++) {
+//                mapDB.insertMap(0, tempLat[i], tempLong[i], new Date(10000));
+//            }
+            Map myMap[] = mapDB.getAllCoorForRun(0);
+            mapDB.close();
+            latArray = new double[myMap.length];
+            longArray = new double[myMap.length];
+            for (int i = 0; i < myMap.length; i++) {
+                latArray[i] = myMap[i].getLatitude();
+                longArray[i] = myMap[i].getLongitude();
+            }
+        } else {
+            latArray = new double[]{43.473209, 43.471870, 43.469507, 43.468697, 43.467911, 43.466603, 43.467335, 43.469173};
+            longArray = new double[]{-80.541670, -80.540039, -80.539275, -80.540155, -80.540455, -80.541171, -80.543489, -80.543961};
+        }
+
         //markers zoom etc.
         double latMin = latArray[0];
         double longMin = longArray[0];

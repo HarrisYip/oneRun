@@ -1,6 +1,7 @@
 package com.onerun.onerun.onerun;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -24,6 +25,8 @@ import java.util.Date;
  * Created by Terrence on 2/27/2015.
  */
 public class WorkoutSetFragment extends Fragment {
+
+    int cadence = 80;
 
     public static WorkoutSetFragment newInstance(int sectionNumber) {
         WorkoutSetFragment frag = new WorkoutSetFragment();
@@ -61,24 +64,12 @@ public class WorkoutSetFragment extends Fragment {
         Spinner paceSecs = (Spinner) view.findViewById(R.id.paceSet2);
         paceSecs.setAdapter(adapter2);
 
-        Button startButton = (Button) view.findViewById(R.id.start);
-        startButton.setOnClickListener(new View.OnClickListener() {
+        Button start = (Button) view.findViewById(R.id.start);
+        start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                Spinner paceMin = (Spinner) view.findViewById(R.id.paceSet);
-                String myPaceMin = paceMin.getSelectedItem().toString();
-                Spinner paceSecs = (Spinner) view.findViewById(R.id.paceSet2);
-                String myPaceSecs = paceSecs.getSelectedItem().toString();
-
-                RunDataSource runDB = new RunDataSource(getActivity());
-                runDB.open();
-                double setPaceMin = Double.parseDouble(myPaceMin);
-                double setPaceSecs = Double.parseDouble(myPaceSecs);
-                long rid = runDB.insertRun(1, new Date(), new Date(), setPace, 10);
-                ToastMessage.message(getActivity(), "" + runDB.getRun((int)rid).getPace());
-                runDB.close();
-                */
+                Intent intent = new Intent(getActivity().getApplicationContext(), Running.class);
+                getActivity().startActivity(intent);
             }
         });
 

@@ -28,6 +28,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Running"
+            android:label="@string/title_activity_running"
+            android:screenOrientation="portrait">
+
+         </activity>
 
         <activity android:name=".ProfileEditActivity" android:label="ProfileEditActivity"></activity>
 

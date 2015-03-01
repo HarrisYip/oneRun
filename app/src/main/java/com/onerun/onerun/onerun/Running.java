@@ -2,11 +2,17 @@ package com.onerun.onerun.onerun;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +29,7 @@ import com.google.android.gms.location.LocationListener;
 import com.onerun.onerun.onerun.Model.MapDataSource;
 import com.onerun.onerun.onerun.Model.RunDataSource;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -38,12 +45,13 @@ public class Running extends Activity implements
     TextView mSecondsTextView;
     TextView mMinutesTextView;
     TextView mHoursTextView;
-    private Timer mTimer;
     private int mHours = 0;
     private int mMinutes = 0;
     private int mSeconds = 0;
     private int mMilli = 0;
+    private int totalMilli = 0;
     int pace = 60;
+    int mCadence = -1;
     long runid;
 
     GoogleApiClient mGoogleApiClient;
@@ -52,10 +60,15 @@ public class Running extends Activity implements
 
     RunDataSource rundb;
     MapDataSource mapdb;
+    private final Timer mTimer = new Timer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mCadence = extras.getInt(WorkoutSetFragment.CADENCE);
+        }
         createLocationRequest();
         setContentView(R.layout.activity_running);
         setupView();
@@ -79,7 +92,7 @@ public class Running extends Activity implements
     }
 
     private void setupTimer() {
-        mTimer = new Timer();
+        final double timePerBeep = mCadence > 0 ? 6000 / mCadence : 0;
 
         mTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -92,6 +105,14 @@ public class Running extends Activity implements
                         mMinutesTextView.setText(mMinutes - 10 >= 0 ? mMinutes + "" : "0" + mMinutes);
                         mHoursTextView.setText(mHours - 10 >= 0 ? mHours + "" : "0" + mHours);
                         mMilli++;
+                        totalMilli++;
+                        if (mCadence > 0 && totalMilli % timePerBeep == 0) {
+                            try {
+                                playSound();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         if (mMilli == 100) {
                             mMilli = 0;
                             mSeconds++;
@@ -121,7 +142,7 @@ public class Running extends Activity implements
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                onDestroy();
                 finish();
             }
         });
@@ -181,6 +202,7 @@ public class Running extends Activity implements
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
+        mTimer.cancel();
         mapdb.close();
     }
 
@@ -195,6 +217,7 @@ public class Running extends Activity implements
 
             public void onClick(DialogInterface dialog, int which) {
                 // Do nothing but close the dialog
+                mTimer.cancel();
                 backPressed();
                 dialog.dismiss();
                 mapdb.close();
@@ -269,6 +292,12 @@ public class Running extends Activity implements
         } else {
             Log.i("ERROR", "Location services connection failed with code " + connectionResult.getErrorCode());
         }
+    }
+
+    private void playSound() throws IOException {
+        AudioManager am = (AudioManager)getSystemService(AUDIO_SERVICE);
+        float vol = 1f; //This will be half of the default system sound
+        am.playSoundEffect(1, vol);
     }
 }
     

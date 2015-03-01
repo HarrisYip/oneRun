@@ -26,7 +26,11 @@ import java.util.Date;
  */
 public class WorkoutSetFragment extends Fragment {
 
-    int cadence = 80;
+    public static final String CADENCE = "CADENCE";
+    private Spinner mIntervalMinute;
+    private TextView mBpmTextView;
+    private ToggleButton mCadenceToggle;
+    private EditText mBpmEditText;
 
     public static WorkoutSetFragment newInstance(int sectionNumber) {
         WorkoutSetFragment frag = new WorkoutSetFragment();
@@ -42,11 +46,14 @@ public class WorkoutSetFragment extends Fragment {
                 container, false);
 
         //EditText pace = (EditText) view.findViewById(R.id.paceSet);
+        mBpmTextView = (TextView) view.findViewById(R.id.bpm);
+        mCadenceToggle = (ToggleButton) view.findViewById(R.id.cadenceSet);
+        mIntervalMinute = (Spinner) view.findViewById(R.id.updateIntervalSet);
+        mBpmEditText = (EditText) view.findViewById(R.id.bpmSet);
 
-        Spinner intervalMinute = (Spinner) view.findViewById(R.id.updateIntervalSet);
         Integer[] mins = new Integer[]{1,2,3,4,5,6,7,8,9};
         ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_dropdown_item_1line, mins);
-        intervalMinute.setAdapter(adapter);
+        mIntervalMinute.setAdapter(adapter);
 
         Spinner intervalSecond = (Spinner) view.findViewById(R.id.updateIntervalSet2);
         Integer[] secs = new Integer[60];
@@ -68,28 +75,30 @@ public class WorkoutSetFragment extends Fragment {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), Running.class);
-                getActivity().startActivity(intent);
+            Intent intent = new Intent(getActivity().getApplicationContext(), Running.class);
+            if(mCadenceToggle.isChecked()) {
+                intent.putExtra(CADENCE, Integer.parseInt(mBpmEditText.getText().toString()));
+            }
+            getActivity().startActivity(intent);
             }
         });
 
-        final ToggleButton bpm = (ToggleButton) view.findViewById(R.id.cadenceSet);
-        bpm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                if(isChecked) {
-                    TextView bpmText = (TextView) view.findViewById(R.id.bpm);
-                    bpmText.setVisibility(View.VISIBLE);
+        mCadenceToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
-                    EditText bpmSet = (EditText) view.findViewById(R.id.bpmSet);
-                    bpmSet.setVisibility(View.VISIBLE);
-                    bpmSet.setText("60");
+
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    mBpmTextView.setVisibility(View.VISIBLE);
+
+                    mBpmEditText.setVisibility(View.VISIBLE);
+                    mBpmEditText.setText("60");
                 } else {
                     TextView bpmText = (TextView) view.findViewById(R.id.bpm);
                     bpmText.setVisibility(View.GONE);
 
                     EditText bpmSet = (EditText) view.findViewById(R.id.bpmSet);
                     bpmSet.setVisibility(View.GONE);
-                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(bpmSet.getWindowToken(), 0);
                 }
             }

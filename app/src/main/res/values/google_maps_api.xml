@@ -5,17 +5,10 @@
 
     To get one, follow this link, follow the directions and press "Create" at the end:
 
-<<<<<<< HEAD
-https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=A3:75:61:0C:38:CB:2D:E2:61:27:E4:7D:0C:E2:11:B4:88:FC:EC:68%3Bcom.onerun.onerun.onerun
-
-    You can also add your credentials to an existing key, using this line:
-    A3:75:61:0C:38:CB:2D:E2:61:27:E4:7D:0C:E2:11:B4:88:FC:EC:68;com.onerun.onerun.onerun
-=======
 https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=CF:A3:EE:86:91:29:0C:18:B2:F4:96:FD:8A:53:1F:1C:79:CF:26:E7%3Bcom.onerun.onerun.onerun.Model
 
     You can also add your credentials to an existing key, using this line:
     CF:A3:EE:86:91:29:0C:18:B2:F4:96:FD:8A:53:1F:1C:79:CF:26:E7;com.onerun.onerun.onerun.Model
->>>>>>> Update UI Elements
 
     Once you have your key (it starts with "AIza"), replace the "google_maps_key"
     string in this file.

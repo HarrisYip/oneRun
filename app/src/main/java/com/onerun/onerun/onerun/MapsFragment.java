@@ -6,12 +6,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -19,19 +18,24 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.onerun.onerun.onerun.Model.Map;
 import com.onerun.onerun.onerun.Model.MapDataSource;
+import com.onerun.onerun.onerun.Model.Run;
 import com.onerun.onerun.onerun.Model.RunDataSource;
 
-import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class MapsFragment extends Fragment {
 
     private static GoogleMap mMap;
+    private TextView mStartTimeTextView;
+    private TextView mEndTimeTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
 
-//        mMap = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map)).getMap();
+        mStartTimeTextView = (TextView) rootView.findViewById(R.id.startTime);
+        mEndTimeTextView = (TextView) rootView.findViewById(R.id.endTime);
 
         setUpMapIfNeeded();
         return rootView;
@@ -60,8 +64,17 @@ public class MapsFragment extends Fragment {
         runDB.open();
 //        runDB.insertRun(0, new Date(10000000), new Date(200000000), 10, 10);
         int runId = runDB.getLastRun();
-        runDB.close();
         if (runId > 0) {
+            Run lastRun = runDB.getRun(runId);
+
+            DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
+            String formattedStartDate = df.format(lastRun.getStarttime());
+            mStartTimeTextView.setText(formattedStartDate);
+
+            String formattedEndDate = df.format(lastRun.getEndtime());
+            mEndTimeTextView.setText(formattedEndDate);
+
             MapDataSource mapDB = new MapDataSource(getActivity());
             mapDB.open();
 //            double tempLat[] = {43.473209, 43.471870, 43.469507, 43.468697};
@@ -81,6 +94,8 @@ public class MapsFragment extends Fragment {
             latArray = new double[]{43.473209, 43.471870, 43.469507, 43.468697, 43.467911, 43.466603, 43.467335, 43.469173};
             longArray = new double[]{-80.541670, -80.540039, -80.539275, -80.540155, -80.540455, -80.541171, -80.543489, -80.543961};
         }
+
+        runDB.close();
 
         //markers zoom etc.
         double latMin = latArray[0];
@@ -108,6 +123,7 @@ public class MapsFragment extends Fragment {
         mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 15));
 
         Polyline line = mMap.addPolyline(options);
+
     }
 
     @Override

@@ -8,11 +8,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.location.Location;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +32,7 @@ import java.util.TimerTask;
 
 
 public class Running extends Activity implements
-        LocationListener,
+        com.google.android.gms.location.LocationListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener{
 
@@ -149,10 +145,12 @@ public class Running extends Activity implements
     }
 
     protected void createLocationRequest() {
-        mLocationRequest = LocationRequest.create()
-                            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                            .setInterval(10000)
-                            .setFastestInterval(1000);
+        this.getSystemService(Context.LOCATION_SERVICE);
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setSmallestDisplacement(0);
+        mLocationRequest.setInterval(100);
+        mLocationRequest.setFastestInterval(50);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
     }
@@ -258,33 +256,29 @@ public class Running extends Activity implements
 
     @Override
     public void onLocationChanged(Location location) {
-        if (null == mBestReading || location.getAccuracy() < mBestReading.getAccuracy()) {
-            mBestReading = location;
+        mBestReading = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mBestReading.getAccuracy() <= 10.f) {
             handleLocationChanged();
         }
     }
 
     @Override
     public void onConnected(Bundle dataBundle) {
-        mBestReading = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 
-        if (null == mBestReading){
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-        } else {
-            handleLocationChanged();
-        }
+        mBestReading = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        handleLocationChanged();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.d("SUSPEND", "WHY");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         if (connectionResult.hasResolution()) {
             try {
-                // Start an Activity that tries to resolve the error
                 connectionResult.startResolutionForResult(this, 9000);
             } catch (IntentSender.SendIntentException e) {
                 e.printStackTrace();
@@ -296,7 +290,7 @@ public class Running extends Activity implements
 
     private void playSound() throws IOException {
         AudioManager am = (AudioManager)getSystemService(AUDIO_SERVICE);
-        float vol = 1f; //This will be half of the default system sound
+        float vol = 1f;
         am.playSoundEffect(1, vol);
     }
 }

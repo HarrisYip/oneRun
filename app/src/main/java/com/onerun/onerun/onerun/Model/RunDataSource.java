@@ -95,6 +95,13 @@ public class RunDataSource {
         }
 
         return lastRun;
+    }
 
+    public void trackEndRun(int rId){
+        String where = dbHelper.RID + "=" + rId;
+        ContentValues cv = new ContentValues();
+        cv.put(dbHelper.ENDTIME,
+                new Date().getTime());
+        writableDB.update(dbHelper.RUN, cv, where, null);
     }
 }

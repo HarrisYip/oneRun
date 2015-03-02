@@ -138,6 +138,10 @@ public class Running extends Activity implements
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                rundb.open();
+                int rid = rundb.getLastRun();
+                rundb.trackEndRun(rid);
+                rundb.close();
                 onDestroy();
                 finish();
             }
@@ -149,8 +153,8 @@ public class Running extends Activity implements
         mLocationRequest = LocationRequest.create();
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setSmallestDisplacement(0);
-        mLocationRequest.setInterval(100);
-        mLocationRequest.setFastestInterval(50);
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(500);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
     }

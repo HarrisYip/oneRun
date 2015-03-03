@@ -18,15 +18,22 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
+            android:name=".SplashActivity"
+            android:label="splash"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".Running"
@@ -35,7 +42,9 @@
 
          </activity>
 
-        <activity android:name=".ProfileEditActivity" android:label="ProfileEditActivity"></activity>
+        <activity android:name=".ProfileEditActivity" android:label="ProfileEditActivity">
+
+        </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -44,10 +53,6 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".Model.MapsActivity"
-            android:label="@string/title_activity_maps" >
-        </activity>
     </application>
 
 </manifest>

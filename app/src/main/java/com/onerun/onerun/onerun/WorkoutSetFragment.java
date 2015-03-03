@@ -89,15 +89,16 @@ public class WorkoutSetFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     mBpmTextView.setVisibility(View.VISIBLE);
-
                     mBpmEditText.setVisibility(View.VISIBLE);
                     mBpmEditText.setText("60");
+                    mBpmEditText.setCursorVisible(false);
                 } else {
                     TextView bpmText = (TextView) view.findViewById(R.id.bpm);
                     bpmText.setVisibility(View.GONE);
 
                     EditText bpmSet = (EditText) view.findViewById(R.id.bpmSet);
                     bpmSet.setVisibility(View.GONE);
+                    bpmSet.setCursorVisible(false);
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(bpmSet.getWindowToken(), 0);
                 }

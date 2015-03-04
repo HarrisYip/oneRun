@@ -23,7 +23,6 @@ public class ProfileEditActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        personDB = new PersonDataSource(getApplicationContext());
         setContentView(R.layout.profile_edit_activity);
 
         mNameEditText = (EditText) findViewById(R.id.nameTextEdit);
@@ -34,7 +33,9 @@ public class ProfileEditActivity extends Activity {
 
 
         // get db connection
-        personDB = new PersonDataSource(this);
+//        personDB = new PersonDataSource(this);
+        personDB = new PersonDataSource(getApplicationContext());
+        personDB.open();
 
         Person currentPerson;
 

@@ -2,7 +2,15 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/oneRunActionBar</item>
+    </style>
+
+    <style name="oneRun" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/oneRunActionBar</item>
+    </style>
+
+    <style name="oneRunActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/oneRun</item>
     </style>
 
 </resources>

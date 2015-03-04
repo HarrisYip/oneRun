@@ -8,108 +8,104 @@
     tools:context="com.onerun.onerun.onerun.Running"
     android:orientation="vertical">
 
-    <TableLayout android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="Pace (min/km):"
-                android:id="@+id/pace"
-             />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="Pace (min/km):"
+            android:id="@+id/pace"/>
 
-            <Spinner
-                android:layout_width="60dp"
-                android:layout_height="70dp"
-                android:id="@+id/paceSet"
-             />
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/paceSet"/>
 
-            <Spinner
-                android:layout_width="60dp"
-                android:layout_height="70dp"
-                android:id="@+id/paceSet2"
-            />
-        </TableRow>
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/paceSet2"/>
 
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="Update Interval: "
-                android:id="@+id/updateInterval"
-             />
+    </LinearLayout>
 
-            <Spinner
-                android:layout_width="60dp"
-                android:layout_height="90dp"
-                android:id="@+id/updateIntervalSet"
-            />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-            <Spinner
-                android:layout_width="60dp"
-                android:layout_height="90dp"
-                android:id="@+id/updateIntervalSet2"
-             />
-        </TableRow>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="Update Interval: "/>
 
-    <TableLayout android:layout_width="match_parent" android:layout_height="150dp">
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="Cadence"
-                android:id="@+id/cadence"
-             />
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/updateIntervalSet"/>
 
-            <ToggleButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/cadenceSet"
-            />
-        </TableRow>
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/updateIntervalSet2"/>
 
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="BPM: "
-                android:id="@+id/bpm"
-                android:visibility="gone"
-            />
+    </LinearLayout>
 
-            <EditText
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/bpmSet"
-                android:visibility="gone"
-            />
-        </TableRow>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="Cadence"
+        android:id="@+id/cadence"/>
 
-        <TableRow>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="Ghost Run"
-                android:id="@+id/ghostRun"
-             />
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cadenceSet"/>
 
-            <ToggleButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ghostRunSet"
-            />
-        </TableRow>
-    </TableLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="BPM: "
+            android:id="@+id/bpm"
+            android:visibility="gone"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/bpmSet"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="Ghost Run"
+        android:id="@+id/ghostRun"/>
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ghostRunSet"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -122,7 +118,7 @@
 
             <Button
                 android:layout_width="fill_parent"
-                android:layout_height="80dp"
+                android:layout_height="wrap_content"
                 android:text="START"
                 android:textSize="50sp"
                 android:id="@+id/start"
@@ -130,6 +126,5 @@
                 android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
-    </TableLayout>
 
 </LinearLayout>

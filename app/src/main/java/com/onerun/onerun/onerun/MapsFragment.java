@@ -1,6 +1,9 @@
 package com.onerun.onerun.onerun;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,8 +15,11 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.onerun.onerun.onerun.Model.Map;
@@ -25,6 +31,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class MapsFragment extends Fragment {
+
+    Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+    Bitmap bmp = Bitmap.createBitmap(200, 50, conf);
+    Canvas canvas = new Canvas(bmp);
 
     private static GoogleMap mMap;
     private TextView mStartTimeTextView;
@@ -124,6 +134,15 @@ public class MapsFragment extends Fragment {
 
         Polyline line = mMap.addPolyline(options);
 
+        Marker markerStart = mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(latArray[0], longArray[0]))
+                        .title("Start")
+        );
+
+        Marker markerFinish = mMap.addMarker(new MarkerOptions()
+            .position(new LatLng(latArray[latArray.length - 1], longArray[longArray.length - 1]))
+            .title("Finish")
+        );
     }
 
     @Override

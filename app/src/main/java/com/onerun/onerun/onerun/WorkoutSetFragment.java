@@ -52,7 +52,7 @@ public class WorkoutSetFragment extends Fragment {
         mBpmEditText = (EditText) view.findViewById(R.id.bpmSet);
 
         Integer[] mins = new Integer[]{1,2,3,4,5,6,7,8,9};
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_dropdown_item_1line, mins);
+        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_spinner_dropdown_item, mins);
         mIntervalMinute.setAdapter(adapter);
 
         Spinner intervalSecond = (Spinner) view.findViewById(R.id.updateIntervalSet2);
@@ -60,12 +60,12 @@ public class WorkoutSetFragment extends Fragment {
         for(int i = 0; i < 60; i++) {
             secs[i] = i;
         }
-        ArrayAdapter<Integer> adapter2 = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_dropdown_item_1line, secs);
+        ArrayAdapter<Integer> adapter2 = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_spinner_dropdown_item, secs);
         intervalSecond.setAdapter(adapter2);
 
         Spinner paceMin = (Spinner) view.findViewById(R.id.paceSet);
         Integer[] paceMins = new Integer[]{1,2,3,4,5,6,7,8,9,10};
-        ArrayAdapter<Integer> paceAdpt = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_dropdown_item_1line, paceMins);
+        ArrayAdapter<Integer> paceAdpt = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_spinner_dropdown_item, paceMins);
         paceMin.setAdapter(paceAdpt);
 
         Spinner paceSecs = (Spinner) view.findViewById(R.id.paceSet2);

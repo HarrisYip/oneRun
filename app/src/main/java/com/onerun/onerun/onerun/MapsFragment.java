@@ -32,9 +32,9 @@ import java.text.SimpleDateFormat;
 
 public class MapsFragment extends Fragment {
 
-    Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-    Bitmap bmp = Bitmap.createBitmap(200, 50, conf);
-    Canvas canvas = new Canvas(bmp);
+//    Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+//    Bitmap bmp = Bitmap.createBitmap(200, 50, conf);
+//    Canvas canvas = new Canvas(bmp);
 
     private static GoogleMap mMap;
     private TextView mStartTimeTextView;
@@ -143,6 +143,9 @@ public class MapsFragment extends Fragment {
             .position(new LatLng(latArray[latArray.length - 1], longArray[longArray.length - 1]))
             .title("Finish")
         );
+
+        markerStart.showInfoWindow();
+        markerFinish.showInfoWindow();
     }
 
     @Override

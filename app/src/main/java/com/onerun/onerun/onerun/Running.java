@@ -47,7 +47,14 @@ public class Running extends Activity implements
     private int totalMilli = 0;
     int pace = 60;
     int mCadence = -1;
+    int mPaceMin = -1;
+    int mPaceSec = -1;
+    int mIntervalMin = -1;
+    int mIntervalSec = -1;
     long runid;
+    boolean mGhostRun = false;
+    String mExerciseType;
+
 
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
@@ -63,6 +70,12 @@ public class Running extends Activity implements
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mCadence = extras.getInt(WorkoutSetFragment.CADENCE);
+            mExerciseType = extras.getString(WorkoutSetFragment.EXERCISE);
+            mPaceMin = extras.getInt(WorkoutSetFragment.PACEMIN);
+            mPaceSec = extras.getInt(WorkoutSetFragment.PACESEC);
+            mIntervalMin = extras.getInt(WorkoutSetFragment.INTERVALMIN);
+            mIntervalSec = extras.getInt(WorkoutSetFragment.INTERVALSEC);
+            mGhostRun = extras.getBoolean(WorkoutSetFragment.GHOSTRUN);
         }
         createLocationRequest();
         setContentView(R.layout.activity_running);

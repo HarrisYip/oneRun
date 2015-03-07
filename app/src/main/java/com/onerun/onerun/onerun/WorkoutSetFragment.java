@@ -27,9 +27,20 @@ import java.util.Date;
 public class WorkoutSetFragment extends Fragment {
 
     public static final String CADENCE = "CADENCE";
+    public static final String GHOSTRUN = "GHOSTRUN";
+    public static final String PACEMIN = "PACEMIN";
+    public static final String PACESEC = "PACESEC";
+    public static final String INTERVALMIN = "INTERVALMIN";
+    public static final String INTERVALSEC = "INTERVALSEC";
+    public static final String EXERCISE = "EXERCISE";
     private Spinner mIntervalMinute;
+    private Spinner mIntervalSeconds;
+    private Spinner mPaceMinute;
+    private Spinner mPaceSeconds;
+    private Spinner mExercise;
     private TextView mBpmTextView;
     private ToggleButton mCadenceToggle;
+    private ToggleButton mGhostRun;
     private EditText mBpmEditText;
 
     public static WorkoutSetFragment newInstance(int sectionNumber) {
@@ -48,28 +59,13 @@ public class WorkoutSetFragment extends Fragment {
         //EditText pace = (EditText) view.findViewById(R.id.paceSet);
         mBpmTextView = (TextView) view.findViewById(R.id.bpm);
         mCadenceToggle = (ToggleButton) view.findViewById(R.id.cadenceSet);
-        mIntervalMinute = (Spinner) view.findViewById(R.id.updateIntervalSet);
+        mGhostRun = (ToggleButton) view.findViewById(R.id.ghostRunSet);
+        mIntervalMinute = (Spinner) view.findViewById(R.id.intervalSetMin);
+        mIntervalSeconds = (Spinner) view.findViewById(R.id.intervalSetSec);
+        mPaceMinute = (Spinner) view.findViewById(R.id.paceSetMin);
+        mPaceSeconds = (Spinner) view.findViewById(R.id.paceSetSec);
+        mExercise = (Spinner) view.findViewById(R.id.exerciseType);
         mBpmEditText = (EditText) view.findViewById(R.id.bpmSet);
-
-        Integer[] mins = new Integer[]{1,2,3,4,5,6,7,8,9};
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_spinner_dropdown_item, mins);
-        mIntervalMinute.setAdapter(adapter);
-
-        Spinner intervalSecond = (Spinner) view.findViewById(R.id.updateIntervalSet2);
-        Integer[] secs = new Integer[60];
-        for(int i = 0; i < 60; i++) {
-            secs[i] = i;
-        }
-        ArrayAdapter<Integer> adapter2 = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_spinner_dropdown_item, secs);
-        intervalSecond.setAdapter(adapter2);
-
-        Spinner paceMin = (Spinner) view.findViewById(R.id.paceSet);
-        Integer[] paceMins = new Integer[]{1,2,3,4,5,6,7,8,9,10};
-        ArrayAdapter<Integer> paceAdpt = new ArrayAdapter<Integer>(getActivity(), android.R.layout.simple_spinner_dropdown_item, paceMins);
-        paceMin.setAdapter(paceAdpt);
-
-        Spinner paceSecs = (Spinner) view.findViewById(R.id.paceSet2);
-        paceSecs.setAdapter(adapter2);
 
         Button start = (Button) view.findViewById(R.id.start);
         start.setOnClickListener(new View.OnClickListener() {
@@ -79,12 +75,20 @@ public class WorkoutSetFragment extends Fragment {
             if(mCadenceToggle.isChecked()) {
                 intent.putExtra(CADENCE, Integer.parseInt(mBpmEditText.getText().toString()));
             }
+            if(mGhostRun.isChecked()) {
+                //TODO: Ghost Run stuff
+                //intent.putExtra(GHOSTRUN, "YES");
+            }
+            intent.putExtra(PACEMIN, Integer.parseInt(mPaceMinute.getSelectedItem().toString()));
+            intent.putExtra(PACESEC, Integer.parseInt(mPaceSeconds.getSelectedItem().toString()));
+            intent.putExtra(INTERVALMIN, Integer.parseInt(mIntervalMinute.getSelectedItem().toString()));
+            intent.putExtra(INTERVALSEC, Integer.parseInt(mIntervalSeconds.getSelectedItem().toString()));
+            intent.putExtra(EXERCISE, mExercise.getSelectedItem().toString());
             getActivity().startActivity(intent);
             }
         });
 
         mCadenceToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
 
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
@@ -104,7 +108,6 @@ public class WorkoutSetFragment extends Fragment {
                 }
             }
         });
-
 
         return view;
     }

@@ -23,12 +23,14 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/paceSet"/>
+            android:entries="@array/minutes"
+            android:id="@+id/paceSetMin"/>
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/paceSet2"/>
+            android:entries="@array/seconds"
+            android:id="@+id/paceSetSec"/>
 
     </LinearLayout>
 
@@ -46,12 +48,14 @@
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/updateIntervalSet"/>
+            android:entries="@array/minutes"
+            android:id="@+id/intervalSetMin"/>
 
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/updateIntervalSet2"/>
+            android:entries="@array/seconds"
+            android:id="@+id/intervalSetSec"/>
 
     </LinearLayout>
 
@@ -102,6 +106,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ghostRunSet"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/exercisePrompt"
+            android:textSize="20sp"/>
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/exerciseArray"
+            android:id="@+id/exerciseType"/>
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -33,7 +33,7 @@ public class MapDataSource {
 
     public long insertMap(int runid, double latitude, double longitude, Date time) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put(dbHelper.RID, runid);
+        contentValues.put(dbHelper.RUNID, runid);
         contentValues.put(dbHelper.LATITUDE, latitude);
         contentValues.put(dbHelper.LONGITUDE, longitude);
         contentValues.put(dbHelper.TIME, time.getTime());
@@ -43,17 +43,17 @@ public class MapDataSource {
         return id;
     }
 
-    public long deleteMap(int mid) {
+    public long deleteMap(int id) {
         String table = dbHelper.MAP;
-        String where = dbHelper.MID + "=" + mid;
+        String where = dbHelper.KEY + "=" + id;
 
         // return negative id on error
         long retId = writableDB.delete(table, where, null);
         return retId;
     }
 
-    public Map getMap(int mid) {
-        String where = dbHelper.MID + "=" + mid;
+    public Map getMap(int id) {
+        String where = dbHelper.KEY + "=" + id;
         Cursor cursor = readableDB.query(dbHelper.MAP, null, where, null, null, null, null);
 
         // get first
@@ -62,7 +62,7 @@ public class MapDataSource {
         }
 
         // create MapModel object
-        Map map = getSingleMap(cursor);
+        Map map = getMapObject(cursor);
 
         // close cursor
         cursor.close();
@@ -70,9 +70,9 @@ public class MapDataSource {
         return map;
     }
 
-    private Map getSingleMap(Cursor cursor) {
-        int midIndex = cursor.getColumnIndex(dbHelper.MID);
-        int ridIndex = cursor.getColumnIndexOrThrow(dbHelper.RID);
+    private Map getMapObject(Cursor cursor) {
+        int midIndex = cursor.getColumnIndex(dbHelper.KEY);
+        int ridIndex = cursor.getColumnIndexOrThrow(dbHelper.RUNID);
         int latitudeIndex = cursor.getColumnIndexOrThrow(dbHelper.LATITUDE);
         int longitudeIndex = cursor.getColumnIndexOrThrow(dbHelper.LONGITUDE);
         int timeIndex = cursor.getColumnIndexOrThrow(dbHelper.TIME);
@@ -88,7 +88,7 @@ public class MapDataSource {
     }
 
     public Map[] getAllCoorForRun(int rId) {
-        String where = dbHelper.RID + "=" + rId;
+        String where = dbHelper.RUNID + "=" + rId;
         Cursor cursor = readableDB.query(dbHelper.MAP, null, where, null, null, null, null);
 
         int cursorSize = cursor.getCount();
@@ -97,7 +97,7 @@ public class MapDataSource {
         if (cursor != null) {
             cursor.moveToFirst();
             for (int i = 0; i < cursorSize; i++) {
-                coordinates[i] = getSingleMap(cursor);
+                coordinates[i] = getMapObject(cursor);
                 cursor.moveToNext();
             }
         }

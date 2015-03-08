@@ -5,19 +5,20 @@ package com.onerun.onerun.onerun.Model;
  */
 public class Person {
     private int id;
+    private int runpassid;
     private String name;
     private int age;
     private double height;
     private double weight;
 
-    public Person(int id, String name, int age, double weight, double height) {
+    public Person(int id, int runpassid, String name, int age, double weight, double height) {
         this.id = id;
+        this.runpassid = runpassid;
         this.name = name;
         this.age = age;
         this.height = height;
         this.weight = weight;
     }
-
 
     public int getId() {
         return id;
@@ -25,6 +26,14 @@ public class Person {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getRunpassid() {
+        return runpassid;
+    }
+
+    public void setRunpassid(int runpassid) {
+        this.runpassid = runpassid;
     }
 
     public String getName() {

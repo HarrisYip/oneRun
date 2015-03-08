@@ -1,9 +1,6 @@
 package com.onerun.onerun.onerun;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +12,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -73,7 +69,7 @@ public class MapsFragment extends Fragment {
         RunDataSource runDB = new RunDataSource(getActivity());
         runDB.open();
 //        runDB.insertRun(0, new Date(10000000), new Date(200000000), 10, 10);
-        int runId = runDB.getLastRun();
+        int runId = runDB.getLastRunID();
         if (runId > 0) {
             Run lastRun = runDB.getRun(runId);
 

@@ -7,19 +7,21 @@ import java.util.Date;
  */
 public class Run {
     private int id;
-    private int personid;
+    private int sportid;
     private Date starttime;
     private Date endtime;
     private double pace;
     private double distance;
+    private double calories;
 
-    public Run(int id, int personid, Date starttime, Date endtime, double pace, double distance) {
+    public Run(int id, int sportid, Date starttime, Date endtime, double pace, double distance, double calories) {
         this.id = id;
-        this.personid = personid;
+        this.sportid = sportid;
         this.starttime = starttime;
         this.endtime = endtime;
         this.pace = pace;
         this.distance = distance;
+        this.calories = calories;
     }
 
     public int getId() {
@@ -30,12 +32,12 @@ public class Run {
         this.id = id;
     }
 
-    public int getPersonid() {
-        return personid;
+    public int getSportid() {
+        return sportid;
     }
 
-    public void setPersonid(int personid) {
-        this.personid = personid;
+    public void setSportid(int sportid) {
+        this.sportid = sportid;
     }
 
     public Date getStarttime() {
@@ -68,5 +70,13 @@ public class Run {
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    public double getCalories() {
+        return calories;
+    }
+
+    public void setCalories(double calories) {
+        this.calories = calories;
     }
 }

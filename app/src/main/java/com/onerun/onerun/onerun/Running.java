@@ -21,7 +21,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationListener;
 import com.onerun.onerun.onerun.Model.MapDataSource;
 import com.onerun.onerun.onerun.Model.RunDataSource;
 
@@ -82,7 +81,7 @@ public class Running extends Activity implements
         rundb.open();
         mapdb.open();
 
-        runid = rundb.insertRun(1,new Date(),new Date(),pace,0);
+        runid = rundb.insertRun(-1,new Date(),new Date(),pace,0, 0); // TODO: change _sportID depending on what sports
 
         rundb.close();
     }
@@ -139,8 +138,8 @@ public class Running extends Activity implements
             @Override
             public void onClick(View v) {
                 rundb.open();
-                int rid = rundb.getLastRun();
-                rundb.trackEndRun(rid);
+                int rid = rundb.getLastRunID();
+                rundb.trackEndRunNow(rid);
                 rundb.close();
                 onDestroy();
                 finish();

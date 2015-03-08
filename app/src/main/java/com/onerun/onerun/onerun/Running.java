@@ -271,7 +271,9 @@ public class Running extends Activity implements
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 
         mBestReading = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        handleLocationChanged();
+        if (mBestReading != null) {
+            handleLocationChanged();
+        }
     }
 
     @Override

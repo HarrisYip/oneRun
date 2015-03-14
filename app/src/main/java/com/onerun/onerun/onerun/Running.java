@@ -285,7 +285,7 @@ public class Running extends Activity implements
     private void handleLocationChanged(){
         final double latitude = mBestReading.getLatitude();
         final double longitude = mBestReading.getLongitude();
-        mapdb.insertMap((int)runid,latitude,longitude,new Date());
+        mapdb.insertMap((int)runid, latitude, longitude, new Date(), totalMilli);
 
         runOnUiThread(new Runnable() {
             @Override

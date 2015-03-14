@@ -4,8 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.text.SimpleDateFormat;
-
 /**
  * Created by Jason on 15-02-27.
  */
@@ -49,9 +47,10 @@ public class DataAccessHelper extends SQLiteOpenHelper {
     public static final String RUNID = "_runID";
     public static final String LATITUDE = "latitude";
     public static final String LONGITUDE = "longitude";
-    public static final String TIME = "time"; // long milliseconds
+    public static final String TRACKTIME = "time"; // long milliseconds
+    public static final String RUNTIME = "runTime"; // long milliseconds
 
-    private static final String CREATE_MAP_TABLE = "CREATE TABLE " + MAP + " (" + KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " + RUNID + " INT, " + LATITUDE + " REAL, " + LONGITUDE + " REAL, " + TIME + " INT);";
+    private static final String CREATE_MAP_TABLE = "CREATE TABLE " + MAP + " (" + KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " + RUNID + " INT, " + LATITUDE + " REAL, " + LONGITUDE + " REAL, " + TRACKTIME + " INT, " + RUNTIME + " INT);";
     private static final String DROP_MAP_TABLE = "DROP TABLE IF EXISTS " + MAP;
 
     // Sport Table

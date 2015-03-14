@@ -31,12 +31,13 @@ public class MapDataSource {
         dbHelper.close();
     }
 
-    public long insertMap(int runid, double latitude, double longitude, Date time) {
+    public long insertMap(int runid, double latitude, double longitude, Date time, long runMilli) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(dbHelper.RUNID, runid);
         contentValues.put(dbHelper.LATITUDE, latitude);
         contentValues.put(dbHelper.LONGITUDE, longitude);
-        contentValues.put(dbHelper.TIME, time.getTime());
+        contentValues.put(dbHelper.TRACKTIME, time.getTime());
+        contentValues.put(dbHelper.RUNTIME, runMilli);
 
         // return negative id if error
         long id = writableDB.insert(dbHelper.MAP, null, contentValues);
@@ -75,16 +76,18 @@ public class MapDataSource {
         int ridIndex = cursor.getColumnIndexOrThrow(dbHelper.RUNID);
         int latitudeIndex = cursor.getColumnIndexOrThrow(dbHelper.LATITUDE);
         int longitudeIndex = cursor.getColumnIndexOrThrow(dbHelper.LONGITUDE);
-        int timeIndex = cursor.getColumnIndexOrThrow(dbHelper.TIME);
+        int timeIndex = cursor.getColumnIndexOrThrow(dbHelper.TRACKTIME);
+        int runIndex = cursor.getColumnIndexOrThrow(dbHelper.RUNTIME);
 
         int mId = Integer.parseInt(cursor.getString(midIndex));
         int mRid = Integer.parseInt(cursor.getString(ridIndex));
         double mLatitude = Double.parseDouble(cursor.getString(latitudeIndex));
         double mLongitude = Double.parseDouble(cursor.getString(longitudeIndex));
         long mMilliseconds = Long.parseLong(cursor.getString(timeIndex));
+        long mRunMilliseconds = Long.parseLong(cursor.getString(runIndex));
         Date mDate = new Date(mMilliseconds);
 
-        return new Map(mId, mRid, mLatitude, mLongitude, mDate);
+        return new Map(mId, mRid, mLatitude, mLongitude, mDate, mRunMilliseconds);
     }
 
     public Map[] getAllCoorForRun(int rId) {

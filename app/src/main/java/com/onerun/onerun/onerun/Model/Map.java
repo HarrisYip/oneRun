@@ -11,13 +11,15 @@ public class Map {
     private double latitude;
     private double longitude;
     private Date time;
+    private long runMilli;
 
-    public Map(int id, int runid, double latitude, double longitude, Date time) {
+    public Map(int id, int runid, double latitude, double longitude, Date time, long runMilli) {
         this.id = id;
         this.runid = runid;
         this.latitude = latitude;
         this.longitude = longitude;
         this.time = time;
+        this.runMilli = runMilli;
     }
 
     public int getId() {
@@ -58,5 +60,13 @@ public class Map {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public long getRunMilli() {
+        return runMilli;
+    }
+
+    public void setRunMilli(long runMilli) {
+        this.runMilli = runMilli;
     }
 }

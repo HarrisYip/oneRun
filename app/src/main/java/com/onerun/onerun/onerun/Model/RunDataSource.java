@@ -106,7 +106,11 @@ public class RunDataSource {
 
         // get
 //        int idIndex = cursor.getColumnIndexOrThrow(dbHelper.KEY); // this doesn't work because column name is MAX(_ID)
-        lastRun = Integer.parseInt(cursor.getString(0));
+        try {
+            lastRun = Integer.parseInt(cursor.getString(0));
+        } catch (Exception e) {
+            lastRun = -1;
+        }
 
         // close cursor
         cursor.close();

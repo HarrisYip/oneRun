@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 
@@ -40,6 +41,7 @@ public class Running extends Activity implements
     TextView mSecondsTextView;
     TextView mMinutesTextView;
     TextView mHoursTextView;
+    ImageButton mPlayPauseButton;
     private int mHours = 0;
     private int mMinutes = 0;
     private int mSeconds = 0;
@@ -62,9 +64,28 @@ public class Running extends Activity implements
 
     RunDataSource rundb;
     MapDataSource mapdb;
-    private final Timer mTimer = new Timer();
+    Timer mTimer;
 
-    @Override
+    View.OnClickListener mPauseOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mPlayPauseButton.setBackgroundResource(R.drawable.ic_action_play);
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, Running.this);
+            mTimer.cancel();
+            mPlayPauseButton.setOnClickListener(mPlayOnClickListener);
+        }
+    };
+
+    View.OnClickListener mPlayOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mPlayPauseButton.setBackgroundResource(R.drawable.ic_action_pause);
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, Running.this);
+            setupTimer();
+            mPlayPauseButton.setOnClickListener(mPauseOnClickListener);
+        }
+    };
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle extras = getIntent().getExtras();
@@ -100,6 +121,7 @@ public class Running extends Activity implements
     }
 
     private void setupTimer() {
+        mTimer = new Timer();
         final double timePerBeep = mCadence > 0 ? 6000 / mCadence : 0;
 
         mTimer.scheduleAtFixedRate(new TimerTask() {
@@ -145,6 +167,7 @@ public class Running extends Activity implements
         mSecondsTextView = (TextView) findViewById(R.id.timeSecsView);
         mMinutesTextView = (TextView) findViewById(R.id.timeMinsView);
         mHoursTextView = (TextView) findViewById(R.id.timeHoursView);
+        mPlayPauseButton = (ImageButton) findViewById(R.id.playPauseButton);
 
         Button start = (Button) findViewById(R.id.sumbit);
         start.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +181,8 @@ public class Running extends Activity implements
                 finish();
             }
         });
+
+        mPlayPauseButton.setOnClickListener(mPauseOnClickListener);
     }
 
     protected void createLocationRequest() {
@@ -232,9 +257,9 @@ public class Running extends Activity implements
             public void onClick(DialogInterface dialog, int which) {
                 // Do nothing but close the dialog
                 mTimer.cancel();
-                backPressed();
                 dialog.dismiss();
                 mapdb.close();
+                backPressed();
             }
 
         });
@@ -290,7 +315,7 @@ public class Running extends Activity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-        Log.d("SUSPEND", "WHY");
+
     }
 
     @Override

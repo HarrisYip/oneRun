@@ -70,7 +70,7 @@
 
     <Space
         android:layout_width="fill_parent"
-        android:layout_height="120sp" />
+        android:layout_height="25dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -82,13 +82,28 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <Space
+            android:id="@+id/space"
+            android:layout_width="fill_parent"
+            android:layout_height="75dp" />
+
+        <ImageButton
+            android:layout_below="@id/space"
+            android:id="@+id/playPauseButton"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/ic_action_pause"
+            android:textSize="50sp"/>
         <Button
             android:layout_width="match_parent"
             android:layout_height="100sp"
+            android:textSize="65sp"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:textAlignment="center"
             android:id="@+id/sumbit"
+            android:gravity="center"
             android:text="Submit"/>
     </RelativeLayout>
 

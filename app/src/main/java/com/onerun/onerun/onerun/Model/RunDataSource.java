@@ -46,7 +46,7 @@ public class RunDataSource {
         return id;
     }
 
-    public long deleteRun(int id) {
+    public long deleteRun(long id) {
         String table = dbHelper.RUN;
         String where = dbHelper.KEY + "=" + id;
 

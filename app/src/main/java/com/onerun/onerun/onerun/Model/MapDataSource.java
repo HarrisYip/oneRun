@@ -44,9 +44,9 @@ public class MapDataSource {
         return id;
     }
 
-    public long deleteMap(int id) {
+    public long deleteAllMapsWithRun(long id) {
         String table = dbHelper.MAP;
-        String where = dbHelper.KEY + "=" + id;
+        String where = dbHelper.RUNID + "=" + id;
 
         // return negative id on error
         long retId = writableDB.delete(table, where, null);

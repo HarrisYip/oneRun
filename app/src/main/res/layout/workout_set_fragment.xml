@@ -1,133 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="8dp"
     android:paddingRight="8dp"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
-    tools:context="com.onerun.onerun.onerun.Running"
-    android:orientation="vertical">
+    tools:context="com.onerun.onerun.onerun.Running">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="Pace (min/km):"
+                android:id="@+id/pace"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/minutes"
+                android:id="@+id/paceSetMin"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/seconds"
+                android:id="@+id/paceSetSec"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="Update Interval: "/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/minutes"
+                android:id="@+id/intervalSetMin"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/seconds"
+                android:id="@+id/intervalSetSec"/>
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:text="Pace (min/km):"
-            android:id="@+id/pace"/>
+            android:text="Cadence"
+            android:id="@+id/cadence"/>
 
-        <Spinner
+        <ToggleButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/minutes"
-            android:id="@+id/paceSetMin"/>
+            android:id="@+id/cadenceSet"/>
 
-        <Spinner
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/seconds"
-            android:id="@+id/paceSetSec"/>
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:text="BPM: "
+                android:id="@+id/bpm"
+                android:visibility="gone"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/bpmSet"
+                android:visibility="gone"/>
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:text="Update Interval: "/>
+            android:text="Ghost Run"
+            android:id="@+id/ghostRun"/>
 
-        <Spinner
+        <ToggleButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:entries="@array/minutes"
-            android:id="@+id/intervalSetMin"/>
+            android:id="@+id/ghostRunSet"/>
 
-        <Spinner
-            android:layout_width="wrap_content"
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:id="@+id/ghostMap"
+            android:name="com.google.android.gms.maps.SupportMapFragment" />
+
+        <LinearLayout
+            android:id="@+id/ghostRunSelector"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:entries="@array/seconds"
-            android:id="@+id/intervalSetSec"/>
+            android:orientation="horizontal"
+            android:visibility="gone">
 
-    </LinearLayout>
+            <ImageButton
+                android:padding="10dip"
+                android:id="@+id/left_ghost_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:background="@null"
+                android:src="@drawable/ic_action_previous_item" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:text="Cadence"
-        android:id="@+id/cadence"/>
+            <TextView
+                android:id="@+id/ghost_run_name"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="5dip"
+                android:gravity="center"
+                android:textSize="8pt"
+                android:text="textview" />
 
-    <ToggleButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/cadenceSet"/>
+            <ImageButton
+                android:padding="10dip"
+                android:id="@+id/right_ghost_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:background="@null"
+                android:src="@drawable/ic_action_next_item" />
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="BPM: "
-            android:id="@+id/bpm"
-            android:visibility="gone"/>
+            android:orientation="horizontal">
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:inputType="number"
-            android:ems="10"
-            android:id="@+id/bpmSet"
-            android:visibility="gone"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/exercisePrompt"
+                android:textSize="20sp"/>
 
-    </LinearLayout>
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:entries="@array/exerciseArray"
+                android:id="@+id/exerciseType"/>
+        </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:text="Ghost Run"
-        android:id="@+id/ghostRun"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    <ToggleButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ghostRunSet"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/exercisePrompt"
-            android:textSize="20sp"/>
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:entries="@array/exerciseArray"
-            android:id="@+id/exerciseType"/>
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -149,4 +196,6 @@
 
         </RelativeLayout>
 
-</LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

@@ -22,6 +22,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.onerun.onerun.onerun.Model.Map;
 import com.onerun.onerun.onerun.Model.MapDataSource;
 import com.onerun.onerun.onerun.Model.RunDataSource;
 
@@ -36,26 +37,28 @@ public class Running extends Activity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener{
 
-    TextView mLocationTextView;
-    TextView mMilliTextView;
-    TextView mSecondsTextView;
-    TextView mMinutesTextView;
-    TextView mHoursTextView;
-    ImageButton mPlayPauseButton;
+    private TextView mLocationTextView;
+    private TextView mMilliTextView;
+    private TextView mSecondsTextView;
+    private TextView mMinutesTextView;
+    private TextView mHoursTextView;
+    private ImageButton mPlayPauseButton;
     private int mHours = 0;
     private int mMinutes = 0;
     private int mSeconds = 0;
     private int mMilli = 0;
     private int totalMilli = 0;
-    int pace = 60;
-    int mCadence = -1;
-    int mPaceMin = -1;
-    int mPaceSec = -1;
-    int mIntervalMin = -1;
-    int mIntervalSec = -1;
-    long runid;
-    boolean mGhostRun = false;
-    String mExerciseType;
+    private int pace = 60;
+    private int mCadence = -1;
+    private int mPaceMin = -1;
+    private int mPaceSec = -1;
+    private int mIntervalMin = -1;
+    private int mIntervalSec = -1;
+    private long runid;
+    private boolean mGhostRun = false;
+    private int mGhostRunId;
+    private String mExerciseType;
+    private Map[] mGhostMapCoor;
 
 
     GoogleApiClient mGoogleApiClient;
@@ -91,14 +94,17 @@ public class Running extends Activity implements
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mCadence = extras.getInt(WorkoutSetFragment.CADENCE);
+            mGhostRun = extras.getBoolean(WorkoutSetFragment.GHOSTRUN);
+            mGhostRunId = extras.getInt(WorkoutSetFragment.GHOSTRUN_ID);
             mExerciseType = extras.getString(WorkoutSetFragment.EXERCISE);
             mPaceMin = extras.getInt(WorkoutSetFragment.PACEMIN);
             mPaceSec = extras.getInt(WorkoutSetFragment.PACESEC);
             mIntervalMin = extras.getInt(WorkoutSetFragment.INTERVALMIN);
             mIntervalSec = extras.getInt(WorkoutSetFragment.INTERVALSEC);
-            mGhostRun = extras.getBoolean(WorkoutSetFragment.GHOSTRUN);
             pace = (60*mPaceMin) + mPaceSec;
+
         }
+
         createLocationRequest();
         setContentView(R.layout.activity_running);
         setupView();
@@ -118,6 +124,9 @@ public class Running extends Activity implements
 
         runid = rundb.insertRun(-1,new Date(),new Date(),pace,0, 0); // TODO: change _sportID depending on what sports
 
+        if (mGhostRun) {
+            mGhostMapCoor = mapdb.getAllCoorForRun(mGhostRunId);
+        }
         rundb.close();
     }
 

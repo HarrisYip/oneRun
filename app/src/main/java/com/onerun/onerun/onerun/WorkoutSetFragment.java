@@ -42,6 +42,7 @@ public class WorkoutSetFragment extends Fragment {
     private static GoogleMap mMap;
     public static final String CADENCE = "CADENCE";
     public static final String GHOSTRUN = "GHOSTRUN";
+    public static final String GHOSTRUN_ID = "GHOSTRUN_ID";
     public static final String PACEMIN = "PACEMIN";
     public static final String PACESEC = "PACESEC";
     public static final String INTERVALMIN = "INTERVALMIN";
@@ -107,7 +108,8 @@ public class WorkoutSetFragment extends Fragment {
                 }
                 if (mGhostRunToggle.isChecked()) {
                     //TODO: Ghost Run stuff
-                    //intent.putExtra(GHOSTRUN, "YES");
+                    intent.putExtra(GHOSTRUN, true);
+                    intent.putExtra(GHOSTRUN_ID, mRouteShown);
                 }
                 intent.putExtra(PACEMIN, Integer.parseInt(mPaceMinute.getSelectedItem().toString()));
                 intent.putExtra(PACESEC, Integer.parseInt(mPaceSeconds.getSelectedItem().toString()));

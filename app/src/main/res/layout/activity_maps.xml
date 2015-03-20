@@ -2,96 +2,122 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <fragment
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:id="@+id/map"
-        android:layout_weight="1"
+        android:layout_weight=".5"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
+
     <LinearLayout
-        android:padding="5sp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:padding="10dip"
+            android:id="@+id/left_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@null"
+            android:src="@drawable/ic_action_previous_item" />
+
+        <TextView
+            android:id="@+id/run_name"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="5dip"
+            android:gravity="center"
+            android:textSize="8pt"
+            android:text="textview" />
+
+        <ImageButton
+            android:padding="10dip"
+            android:id="@+id/right_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@null"
+            android:src="@drawable/ic_action_next_item" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/mapInfo"
-        android:layout_weight="1"
-        android:visibility="visible"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
-
-            <ImageButton
-                android:padding="10dip"
-                android:id="@+id/left_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="@null"
-                android:src="@drawable/ic_action_previous_item" />
-
-            <TextView
-                android:id="@+id/run_name"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dip"
-                android:gravity="center"
-                android:textSize="8pt"
-                android:text="textview" />
-
-            <ImageButton
-                android:padding="10dip"
-                android:id="@+id/right_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="@null"
-                android:src="@drawable/ic_action_next_item" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="fill_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray"/>
+        android:layout_weight="0.5">
 
         <LinearLayout
+            android:padding="5sp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="Start Time: "/>
-            <TextView
-                android:id="@+id/startTime"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="2015/03/12 12:30:23"
-                android:visibility="visible"
-                android:gravity="right"/>
-        </LinearLayout>
+            android:layout_height="fill_parent"
+            android:id="@+id/mapInfo"
+            android:layout_weight="1"
+            android:visibility="visible"
+            android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="End Time: "/>
-            <TextView
-                android:id="@+id/endTime"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:text="2015/03/12 12:30:25"
-                android:gravity="right"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="Start Time: "/>
+                <TextView
+                    android:id="@+id/startTime"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="2015/03/12 12:30:23"
+                    android:visibility="visible"
+                    android:gravity="right"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="End Time: "/>
+                <TextView
+                    android:id="@+id/endTime"
+                    android:layout_width="match_parent"
+                    android:text="2015/03/12 12:30:25"
+                    android:gravity="right"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <com.jjoe64.graphview.helper.GraphViewXML
+                    android:id="@+id/pace_graph"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dip"
+                    app:seriesData="0=0 "
+                    app:seriesType="line"
+                    app:seriesColor="#ee0000" />
+            </LinearLayout>
+
         </LinearLayout>
-    </LinearLayout>
+
+    </ScrollView>
 </LinearLayout>
+
 

@@ -97,6 +97,7 @@ public class Running extends Activity implements
             mIntervalMin = extras.getInt(WorkoutSetFragment.INTERVALMIN);
             mIntervalSec = extras.getInt(WorkoutSetFragment.INTERVALSEC);
             mGhostRun = extras.getBoolean(WorkoutSetFragment.GHOSTRUN);
+            pace = (60*mPaceMin) + mPaceSec;
         }
         createLocationRequest();
         setContentView(R.layout.activity_running);

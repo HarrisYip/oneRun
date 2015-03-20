@@ -1,6 +1,8 @@
 package com.onerun.onerun.onerun;
 
 import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Paint;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,6 +23,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.jjoe64.graphview.DefaultLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 import com.onerun.onerun.onerun.Model.Map;
 import com.onerun.onerun.onerun.Model.MapDataSource;
 import com.onerun.onerun.onerun.Model.Run;
@@ -28,6 +35,8 @@ import com.onerun.onerun.onerun.Model.RunDataSource;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
 
 public class MapsFragment extends Fragment {
 
@@ -44,21 +53,45 @@ public class MapsFragment extends Fragment {
     private View rootView;
     private int lastRunId;
     private int currentRun;
+    private GraphView graph;
     Polyline line;
     private ArrayList<Integer> Runs;
+    private MapDataSource mMapDB;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.activity_maps, container, false);
 
         addListenerOnButton();
 
+        mMapDB = new MapDataSource(getActivity());
+
         mStartTimeTextView = (TextView) rootView.findViewById(R.id.startTime);
         mEndTimeTextView = (TextView) rootView.findViewById(R.id.endTime);
         mRunNameView = (TextView) rootView.findViewById(R.id.run_name);
+        graph = (GraphView) rootView.findViewById(R.id.pace_graph);
+
+        graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+            @Override
+            public String formatLabel(double value, boolean isValueX) {
+                if (isValueX) {
+                    // show normal x values
+                    int minutes = (int)value / 60;
+                    int seconds = (int)value % 60;
+                    return String.format("%d:%02d", minutes, seconds);
+                } else {
+                    int minutes = (int)value / 60;
+                    int seconds = (int)value % 60;
+                    return String.format("%d:%02d", minutes, seconds);
+                }
+            }
+        });
 
         loadRunIds();
 
         setUpMapIfNeeded();
+
+
         return rootView;
     }
 
@@ -125,6 +158,7 @@ public class MapsFragment extends Fragment {
 
     private void updateCoord(){
         mMap.clear();
+        double pace;
         double latArray[];
         double longArray[];
         RunDataSource runDB = new RunDataSource(getActivity());
@@ -133,6 +167,9 @@ public class MapsFragment extends Fragment {
         int runId = currentRun;
         if (runId > 0) {
             Run lastRun = runDB.getRun(runId);
+            upDateGraph(lastRun);
+
+
 
             DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
@@ -142,15 +179,15 @@ public class MapsFragment extends Fragment {
             String formattedEndDate = df.format(lastRun.getEndtime());
             mEndTimeTextView.setText(formattedEndDate);
 
-            MapDataSource mapDB = new MapDataSource(getActivity());
-            mapDB.open();
+
+            mMapDB.open();
 //            double tempLat[] = {43.473209, 43.471870, 43.469507, 43.468697};
 //            double tempLong[] = {-80.541670, -80.540039, -80.539275, -80.540155};
 //            for (int i = 0; i < 4; i++) {
 //                mapDB.insertMap(0, tempLat[i], tempLong[i], new Date(10000));
 //            }
-            Map myMap[] = mapDB.getAllCoorForRun(runId);
-            mapDB.close();
+            Map myMap[] = mMapDB.getAllCoorForRun(runId);
+            mMapDB.close();
             latArray = new double[myMap.length];
             longArray = new double[myMap.length];
             for (int i = 0; i < myMap.length; i++) {
@@ -252,6 +289,83 @@ public class MapsFragment extends Fragment {
         }
 
     }
+    //return average sec/km;
+    private double getSpeed(double [] longituted, double [] lattitude, double [] time){
+        double speed = 0;
+        int n = time.length -1;
+        for(int x = 0; x < n; x++){
+            double dist = Measurements.distance(longituted[x],lattitude[x],longituted[x+1],lattitude[x+1],"K");
+            double diff_time = time[x+1] - time[x];
+            if(dist != 0) {
+                speed += diff_time / dist;
+            }
+        }
+        speed /= n;
+        return speed;
+    }
+
+    private void upDateGraph(Run r){
+
+
+        Date start = r.getStarttime();
+        Date end = r.getEndtime();
+        int s = 0;
+        int e = (int) ((end.getTime()-start.getTime()));
+        e = e/1000;
+        //ToastMessage.message(getActivity().getApplicationContext(),new String(""+r.getPace()));
+        LineGraphSeries<DataPoint> series1 = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(s, r.getPace()),
+                new DataPoint(e, r.getPace()),
+        });
+
+
+        mMapDB.open();
+        Map myMap[] = mMapDB.getAllCoorForRun(r.getId());
+        mMapDB.close();
+        int sample = 5;
+        DataPoint[] d = new DataPoint[myMap.length];
+        Random randomGenerator = new Random();
+        double [] avglong = new double[sample];
+        double [] avglat= new double[sample];
+        double [] avgtime= new double[sample];
+        double speed = 0;
+
+        for(int i = 0; i < myMap.length; i++){
+            d[i] = new DataPoint(myMap[i].getRunMilli()/1000,120);
+            if(i%sample == 0){
+                if(i != 0){
+                    speed = getSpeed(avglong, avglat, avgtime);
+                    for(int x = 0; x < sample; x++){
+                        d[i-x] = new DataPoint(myMap[i-x].getRunMilli()/100,speed);
+                    }
+                }
+                avglong = new double[sample];
+                avglat = new double[sample];
+                avgtime = new double[sample];
+            }
+            avglong[i%sample] = myMap[i].getLongitude();
+            avglat[i%sample] = myMap[i].getLatitude();
+            avgtime[i%sample] = myMap[i].getRunMilli()/1000;
+            //d[i] = new DataPoint(myMap[i].getRunMilli()/100,randomGenerator.nextInt(4)+55);
+        }
+
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setMaxX(e);
+        graph.getViewport().setMinY(0);
+        graph.getViewport().setMaxY(1060);
+        graph.removeAllSeries();
+        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<DataPoint>(d);
+        //Paint paint = new Paint();
+        //paint.setStyle(Paint.Style.STROKE);
+        //paint.setStrokeWidth(10);
+        //paint.setPathEffect(new DashPathEffect(new float[]{8, 5}, 0));
+        //series1.setCustomPaint(paint);
+        series2.setColor(Color.RED);
+        graph.addSeries(series1);
+        graph.addSeries(series2);
+    }
 
     private void setUpMap(){
         double latArray[];
@@ -262,7 +376,7 @@ public class MapsFragment extends Fragment {
         int runId = runDB.getLastRunID();
         if (runId > 0) {
             Run lastRun = runDB.getRun(runId);
-
+            upDateGraph(lastRun);
             DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
             String formattedStartDate = df.format(lastRun.getStarttime());
@@ -271,15 +385,15 @@ public class MapsFragment extends Fragment {
             String formattedEndDate = df.format(lastRun.getEndtime());
             mEndTimeTextView.setText(formattedEndDate);
 
-            MapDataSource mapDB = new MapDataSource(getActivity());
-            mapDB.open();
+
+            mMapDB.open();
 //            double tempLat[] = {43.473209, 43.471870, 43.469507, 43.468697};
 //            double tempLong[] = {-80.541670, -80.540039, -80.539275, -80.540155};
 //            for (int i = 0; i < 4; i++) {
 //                mapDB.insertMap(0, tempLat[i], tempLong[i], new Date(10000));
 //            }
-            Map myMap[] = mapDB.getAllCoorForRun(runId);
-            mapDB.close();
+            Map myMap[] = mMapDB.getAllCoorForRun(runId);
+            mMapDB.close();
             latArray = new double[myMap.length];
             longArray = new double[myMap.length];
             for (int i = 0; i < myMap.length; i++) {

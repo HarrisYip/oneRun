@@ -19,6 +19,7 @@
     <string name="exercisePrompt">Select An Exercise: </string>
     <string-array name="exerciseArray">
         <item>Running</item>
+        <item>Walking</item>
         <item>Cycling</item>
     </string-array>
 

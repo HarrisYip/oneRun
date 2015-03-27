@@ -49,11 +49,14 @@ public class Running extends Activity implements
     private int mMilli = 0;
     private int totalMilli = 0;
     private int pace = 60;
+    private long mAveragePace = 0;
     private int mCadence = -1;
     private int mPaceMin = -1;
     private int mPaceSec = -1;
     private int mIntervalMin = -1;
     private int mIntervalSec = -1;
+    private int mInterval = -1;
+    private long mDistance = 0;
     private long runid;
     private boolean mGhostRun = false;
     private int mGhostRunId;
@@ -102,6 +105,7 @@ public class Running extends Activity implements
             mIntervalMin = extras.getInt(WorkoutSetFragment.INTERVALMIN);
             mIntervalSec = extras.getInt(WorkoutSetFragment.INTERVALSEC);
             pace = (60*mPaceMin) + mPaceSec;
+            mInterval = (mIntervalMin * 60) + mIntervalSec;
 
         }
 
@@ -153,6 +157,10 @@ public class Running extends Activity implements
                                 e.printStackTrace();
                             }
                         }
+
+                        if (pace > 0 && totalMilli % mInterval == 0){
+                            checkCurrentPace();
+                        }
                         if (mMilli == 100) {
                             mMilli = 0;
                             mSeconds++;
@@ -169,6 +177,15 @@ public class Running extends Activity implements
                 });
             }
         }, 10, 10);
+    }
+
+    private void checkCurrentPace() {
+        //TODO:Text to speech
+
+        if (mAveragePace > pace) {
+        } else if (mAveragePace < pace) {
+
+        }
     }
 
     private void setupView() {
@@ -303,6 +320,9 @@ public class Running extends Activity implements
         final double latitude = mBestReading.getLatitude();
         final double longitude = mBestReading.getLongitude();
         mapdb.insertMap((int)runid, latitude, longitude, new Date(), totalMilli);
+        if (mDistance > 0) {
+            mAveragePace = (totalMilli / 100) / mDistance;
+        }
 
         runOnUiThread(new Runnable() {
             @Override
@@ -316,6 +336,9 @@ public class Running extends Activity implements
     public void onLocationChanged(Location location) {
         Location tempLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (tempLocation != null && (mBestReading == null || (tempLocation.getLongitude() != mBestReading.getLongitude() || tempLocation.getLatitude() != mBestReading.getLatitude())) && tempLocation.getAccuracy() <= 11.0f) {
+            if (mBestReading != null) {
+                mDistance += Measurements.distance(mBestReading.getLatitude(), mBestReading.getLongitude(), tempLocation.getLatitude(), tempLocation.getLongitude(), "K");
+            }
             mBestReading = tempLocation;
             handleLocationChanged();
         }

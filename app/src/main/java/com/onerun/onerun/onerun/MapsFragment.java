@@ -5,6 +5,7 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -292,15 +293,19 @@ public class MapsFragment extends Fragment {
     //return average sec/km;
     private double getSpeed(double [] longituted, double [] lattitude, double [] time){
         double speed = 0;
-        int n = time.length -1;
+        int n = time.length - 1;
+        int count = 0;
         for(int x = 0; x < n; x++){
-            double dist = Measurements.distance(longituted[x],lattitude[x],longituted[x+1],lattitude[x+1],"K");
+            double dist = Measurements.distance(lattitude[x], longituted[x], lattitude[x+1], longituted[x+1], "K");
             double diff_time = time[x+1] - time[x];
             if(dist != 0) {
                 speed += diff_time / dist;
+                count++;
             }
         }
-        speed /= n;
+        if (count > 0) {
+            speed /= count;
+        }
         return speed;
     }
 
@@ -322,31 +327,18 @@ public class MapsFragment extends Fragment {
         mMapDB.open();
         Map myMap[] = mMapDB.getAllCoorForRun(r.getId());
         mMapDB.close();
-        int sample = 5;
-        DataPoint[] d = new DataPoint[myMap.length];
-        Random randomGenerator = new Random();
-        double [] avglong = new double[sample];
-        double [] avglat= new double[sample];
-        double [] avgtime= new double[sample];
-        double speed = 0;
+        DataPoint[] d = new DataPoint[myMap.length - 1];
+        double distance = 0;
 
-        for(int i = 0; i < myMap.length; i++){
-            d[i] = new DataPoint(myMap[i].getRunMilli()/1000,120);
-            if(i%sample == 0){
-                if(i != 0){
-                    speed = getSpeed(avglong, avglat, avgtime);
-                    for(int x = 0; x < sample; x++){
-                        d[i-x] = new DataPoint(myMap[i-x].getRunMilli()/100,speed);
-                    }
-                }
-                avglong = new double[sample];
-                avglat = new double[sample];
-                avgtime = new double[sample];
+
+        for(int i = 0; i < myMap.length - 1; i++){
+            double time = myMap[i + 1].getRunMilli()/100;
+            double dist = Measurements.distance(myMap[i].getLatitude(), myMap[i].getLongitude(), myMap[i + 1].getLatitude(), myMap[i + 1].getLongitude(), "K");
+            if (!Double.isNaN(dist)){
+                distance += dist;
             }
-            avglong[i%sample] = myMap[i].getLongitude();
-            avglat[i%sample] = myMap[i].getLatitude();
-            avgtime[i%sample] = myMap[i].getRunMilli()/1000;
-            //d[i] = new DataPoint(myMap[i].getRunMilli()/100,randomGenerator.nextInt(4)+55);
+            Log.d("[AYO]", time + " " + distance + " " + myMap[i].getLatitude() + " " + myMap[i].getLongitude() + " " + myMap[i + 1].getLatitude() + " " + myMap[i + 1].getLongitude());
+            d[i] = new DataPoint(time, time/distance);
         }
 
         graph.getViewport().setXAxisBoundsManual(true);
@@ -354,7 +346,7 @@ public class MapsFragment extends Fragment {
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(e);
         graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(1060);
+        graph.getViewport().setMaxY(r.getPace() * 3);
         graph.removeAllSeries();
         LineGraphSeries<DataPoint> series2 = new LineGraphSeries<DataPoint>(d);
         //Paint paint = new Paint();

@@ -174,6 +174,9 @@ public class Running extends Activity implements
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mBestReading != null) {
+                    handleLocationChanged();
+                }
                 rundb.open();
                 int rid = rundb.getLastRunID();
                 rundb.trackEndRunNow(rid);
@@ -302,8 +305,9 @@ public class Running extends Activity implements
 
     @Override
     public void onLocationChanged(Location location) {
-        mBestReading = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mBestReading.getAccuracy() <= 10.f) {
+        Location tempLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (tempLocation != null && (mBestReading == null || (tempLocation.getLongitude() != mBestReading.getLongitude() || tempLocation.getLatitude() != mBestReading.getLatitude())) && tempLocation.getAccuracy() <= 11.0f) {
+            mBestReading = tempLocation;
             handleLocationChanged();
         }
     }
@@ -311,9 +315,9 @@ public class Running extends Activity implements
     @Override
     public void onConnected(Bundle dataBundle) {
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
-        mBestReading = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mBestReading != null) {
+        Location tempLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (tempLocation != null && tempLocation.getAccuracy() <= 11.0f) {
+            mBestReading = tempLocation;
             handleLocationChanged();
         }
     }

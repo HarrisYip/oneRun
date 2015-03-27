@@ -28,6 +28,7 @@ import com.onerun.onerun.onerun.Model.MapDataSource;
 import com.onerun.onerun.onerun.Model.PersonDataSource;
 import com.onerun.onerun.onerun.Model.Run;
 import com.onerun.onerun.onerun.Model.RunDataSource;
+import com.onerun.onerun.onerun.Model.ServerUtil;
 
 import java.io.IOException;
 import java.util.Date;
@@ -126,6 +127,18 @@ public class Running extends Activity implements
         setupTimer();
 
         setupDatabases();
+
+        /*new Thread(new Runnable() {
+            public void run() {
+                try {
+                    Person p = ServerUtil.getRunner("00:00:00:00:00:00");
+                    String n = p.getName();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();*/
+        ServerUtil.endRun("00:00:00:00:00:00");
 
     }
 

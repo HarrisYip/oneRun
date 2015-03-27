@@ -9,6 +9,7 @@ import android.content.IntentSender;
 import android.location.Location;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +29,7 @@ import com.onerun.onerun.onerun.Model.RunDataSource;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -35,8 +37,10 @@ import java.util.TimerTask;
 public class Running extends Activity implements
         com.google.android.gms.location.LocationListener,
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener{
+        GoogleApiClient.OnConnectionFailedListener,
+        TextToSpeech.OnInitListener{
 
+    private TextToSpeech mTts;
     private TextView mLocationTextView;
     private TextView mMilliTextView;
     private TextView mSecondsTextView;
@@ -105,12 +109,15 @@ public class Running extends Activity implements
             mIntervalMin = extras.getInt(WorkoutSetFragment.INTERVALMIN);
             mIntervalSec = extras.getInt(WorkoutSetFragment.INTERVALSEC);
             pace = (60*mPaceMin) + mPaceSec;
-            mInterval = (mIntervalMin * 60) + mIntervalSec;
+            mInterval = ((mIntervalMin * 60) + mIntervalSec) * 100;
 
         }
 
         createLocationRequest();
         setContentView(R.layout.activity_running);
+
+        mTts = new TextToSpeech(this, this);
+
         setupView();
 
         setupTimer();
@@ -182,9 +189,10 @@ public class Running extends Activity implements
     private void checkCurrentPace() {
         //TODO:Text to speech
 
-        if (mAveragePace > pace) {
-        } else if (mAveragePace < pace) {
-
+        if (mAveragePace > pace + 5) {
+            mTts.speak("You are going too fast, your pace is " + mAveragePace, mTts.QUEUE_FLUSH, null);
+        } else if (mAveragePace < pace - 5) {
+            mTts.speak("You are going too slow, your pace is " + mAveragePace, mTts.QUEUE_FLUSH, null);
         }
     }
 
@@ -369,6 +377,14 @@ public class Running extends Activity implements
             }
         } else {
             Log.i("ERROR", "Location services connection failed with code " + connectionResult.getErrorCode());
+        }
+    }
+
+    @Override
+    public void onInit(int status) {
+        if(status == TextToSpeech.SUCCESS) {
+            if(mTts.isLanguageAvailable(Locale.CANADA) == TextToSpeech.LANG_AVAILABLE)
+                mTts.setLanguage(Locale.CANADA);
         }
     }
 

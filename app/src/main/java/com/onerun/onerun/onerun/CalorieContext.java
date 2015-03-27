@@ -14,18 +14,3 @@ public class CalorieContext {
         return this.calCalc.calc(duration, weight);
     }
 }
-
-/*
-//Example usage based on tutorial point
-
-public class CalorieCalcStrat {
-   public static void main(String[] args) {
-        //some db things
-        //make instance of a stategy implementation
-        Context context = new Context(new CyclingCalorie());
-        //call contexts calculate which calls the implementations calculate
-        context.calc(duration, weight);
-        //close db
-   }
-}
- */

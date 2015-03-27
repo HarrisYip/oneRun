@@ -25,7 +25,9 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.onerun.onerun.onerun.Model.Map;
 import com.onerun.onerun.onerun.Model.MapDataSource;
+import com.onerun.onerun.onerun.Model.PersonDataSource;
 import com.onerun.onerun.onerun.Model.RunDataSource;
+import com.onerun.onerun.onerun.Model.SportDataSource;
 
 import java.io.IOException;
 import java.util.Date;
@@ -74,6 +76,7 @@ public class Running extends Activity implements
 
     RunDataSource rundb;
     MapDataSource mapdb;
+    PersonDataSource persondb;
     Timer mTimer;
 
     View.OnClickListener mPauseOnClickListener = new View.OnClickListener() {
@@ -128,11 +131,25 @@ public class Running extends Activity implements
     private void setupDatabases() {
         rundb = new RunDataSource(this);
         mapdb = new MapDataSource(this);
+        persondb = new PersonDataSource(this);
 
         rundb.open();
         mapdb.open();
 
-        runid = rundb.insertRun(-1,new Date(),new Date(),pace,0, 0); // TODO: change _sportID depending on what sports
+        int exercise = -1;
+        switch (mExerciseType) {
+            case "Running":
+                exercise = 1;
+                break;
+            case "Walking":
+                exercise = 2;
+                break;
+            case "Cycling":
+                exercise = 3;
+                break;
+        }
+
+        runid = rundb.insertRun(exercise,new Date(),new Date(),pace,0, 0); // TODO: change _sportID depending on what sports
 
         if (mGhostRun) {
             mGhostMapCoor = mapdb.getAllCoorForRun(mGhostRunId);
@@ -214,6 +231,10 @@ public class Running extends Activity implements
                 int rid = rundb.getLastRunID();
                 rundb.trackEndRunNow(rid);
                 rundb.close();
+                // calculate calories
+                CalorieInterface calorieInterface = new CalorieInterface();
+                calorieInterface.newSrategy(rundb, persondb, rid);
+
                 onDestroy();
                 finish();
             }

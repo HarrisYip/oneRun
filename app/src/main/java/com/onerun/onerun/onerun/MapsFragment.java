@@ -33,6 +33,8 @@ import com.onerun.onerun.onerun.Model.MapDataSource;
 import com.onerun.onerun.onerun.Model.Run;
 import com.onerun.onerun.onerun.Model.RunDataSource;
 
+import org.w3c.dom.Text;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,6 +52,7 @@ public class MapsFragment extends Fragment {
     private TextView mStartTimeTextView;
     private TextView mEndTimeTextView;
     private TextView mRunNameView;
+    private TextView mCalorieCount;
     private ImageButton next;
     private ImageButton pervious;
     private View rootView;
@@ -88,6 +91,7 @@ public class MapsFragment extends Fragment {
                 }
             }
         });
+        mCalorieCount = (TextView) rootView.findViewById(R.id.calorieCount);
 
         loadRunIds();
 
@@ -131,6 +135,7 @@ public class MapsFragment extends Fragment {
             mRunNameView.setText(getRunName(currentRun));
             updateTime();
             updateCoord();
+            updateCalories();
         }
     }
 
@@ -140,6 +145,7 @@ public class MapsFragment extends Fragment {
             mRunNameView.setText(getRunName(currentRun));
             updateTime();
             updateCoord();
+            updateCalories();
         }
     }
 
@@ -155,6 +161,16 @@ public class MapsFragment extends Fragment {
 
         String formattedEndDate = df.format(lastRun.getEndtime());
         mEndTimeTextView.setText(formattedEndDate);
+        runDB.close();
+    }
+
+    private void updateCalories() {
+        RunDataSource runDB = new RunDataSource(getActivity());
+        runDB.open();
+        Run lastRun = runDB.getRun(currentRun);
+
+        String calories = String.valueOf(lastRun.getCalories());
+        mCalorieCount.setText(calories);
         runDB.close();
     }
 

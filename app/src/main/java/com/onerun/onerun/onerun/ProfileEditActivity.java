@@ -76,7 +76,7 @@ public class ProfileEditActivity extends Activity {
                     int age = Integer.parseInt(mAgeEditText.getText().toString());
                     double weight = Double.parseDouble(mWeightEditText.getText().toString());
                     double height = Double.parseDouble(mHeightEditText.getText().toString());
-                    long id = personDB.insertProfile(-1,name, age, weight, height); // TODO: change _runpassID for runpass
+                    long id = personDB.insertProfile("-1",name, age, weight, height); // TODO: change _runpassID for runpass
                     personDB.close();
                     if (id >= 0) {
                         ToastMessage.message(getApplicationContext(), "Profile Created");

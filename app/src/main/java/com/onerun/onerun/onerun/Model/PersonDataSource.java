@@ -29,7 +29,7 @@ public class PersonDataSource {
         dbHelper.close();
     }
 
-    public long insertProfile(int runpassid, String name, int age, double weight, double height) {
+    public long insertProfile(String runpassid, String name, int age, double weight, double height) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(dbHelper.RUNPASSID, runpassid);
         contentValues.put(dbHelper.NAME, name);
@@ -65,7 +65,7 @@ public class PersonDataSource {
         int weightIndex = cursor.getColumnIndexOrThrow(dbHelper.WEIGHT);
         int heightIndex = cursor.getColumnIndexOrThrow(dbHelper.HEIGHT);
 
-        int pRunpassid = Integer.parseInt(cursor.getString(runpassidIndex));
+        String pRunpassid = cursor.getString(runpassidIndex);
         String pName = cursor.getString(nameIndex);
         int pAge = Integer.parseInt(cursor.getString(ageIndex));
         double pWeight = Double.parseDouble(cursor.getString(weightIndex));
@@ -73,6 +73,42 @@ public class PersonDataSource {
 
         Person person = new Person(id, pRunpassid, pName, pAge, pWeight, pHeight);
 
+        // close cursor
+        cursor.close();
+
+        return person;
+    }
+
+    public Person getPersonByRunPass(String MAC) {
+        // open cursor
+        String where = dbHelper.RUNPASSID + "=" + MAC;
+        Cursor cursor = readableDB.query(dbHelper.PERSON, null, where, null, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+
+        Person person;
+        try {
+            // create PersonModel object
+            int personidIndex = cursor.getColumnIndexOrThrow(dbHelper.KEY);
+            int runpassidIndex = cursor.getColumnIndexOrThrow(dbHelper.RUNPASSID);
+            int nameIndex = cursor.getColumnIndexOrThrow(dbHelper.NAME);
+            int ageIndex = cursor.getColumnIndexOrThrow(dbHelper.AGE);
+            int weightIndex = cursor.getColumnIndexOrThrow(dbHelper.WEIGHT);
+            int heightIndex = cursor.getColumnIndexOrThrow(dbHelper.HEIGHT);
+
+            int pId = Integer.parseInt(cursor.getString(personidIndex));
+            String pRunpassid = cursor.getString(runpassidIndex);
+            String pName = cursor.getString(nameIndex);
+            int pAge = Integer.parseInt(cursor.getString(ageIndex));
+            double pWeight = Double.parseDouble(cursor.getString(weightIndex));
+            double pHeight = Double.parseDouble(cursor.getString(heightIndex));
+
+            person = new Person(pId, pRunpassid, pName, pAge, pWeight, pHeight);
+        } catch (Exception e) {
+            person = new Person(-1, "fail", "fail", 0, 0, 0);
+        }
         // close cursor
         cursor.close();
 

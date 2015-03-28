@@ -2,20 +2,28 @@ package com.onerun.onerun.onerun;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.location.Location;
 import android.media.AudioManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 
@@ -27,6 +35,8 @@ import com.onerun.onerun.onerun.Model.Map;
 import com.onerun.onerun.onerun.Model.MapDataSource;
 import com.onerun.onerun.onerun.Model.PersonDataSource;
 import com.onerun.onerun.onerun.Model.Run;
+import com.onerun.onerun.onerun.Model.Person;
+import com.onerun.onerun.onerun.Model.PersonDataSource;
 import com.onerun.onerun.onerun.Model.RunDataSource;
 import com.onerun.onerun.onerun.Model.ServerUtil;
 
@@ -44,12 +54,20 @@ public class Running extends Activity implements
         TextToSpeech.OnInitListener{
 
     private TextToSpeech mTts;
-    private TextView mLocationTextView;
-    private TextView mMilliTextView;
-    private TextView mSecondsTextView;
-    private TextView mMinutesTextView;
-    private TextView mHoursTextView;
-    private ImageButton mPlayPauseButton;
+
+    // RunPass bluetooth connection adapter
+    private BluetoothAdapter mBtAdapter;
+    private ArrayAdapter<String> mNewDevicesArrayAdapter;
+
+    // person db connection
+    private PersonDataSource personDB;
+
+    TextView mLocationTextView;
+    TextView mMilliTextView;
+    TextView mSecondsTextView;
+    TextView mMinutesTextView;
+    TextView mHoursTextView;
+    ImageButton mPlayPauseButton;
     private int mHours = 0;
     private int mMinutes = 0;
     private int mSeconds = 0;
@@ -123,12 +141,133 @@ public class Running extends Activity implements
         mTts = new TextToSpeech(this, this);
 
         setupView();
-
         setupTimer();
-
         setupDatabases();
 
+        setupBluetooth(); // run this before setup runpass profile
+        setupRunPassProfile(); // requires bluetooth to be set up first (needs to know bluetooth MAC address)
+        doDiscovery();
     }
+
+    // send profile information to heroku to know that I am running
+    private void setupRunPassProfile() {
+        // get bluetooth mac address
+        String btMACAddress = mBtAdapter.getAddress();
+
+        // get profile
+        personDB = new PersonDataSource(this);
+        personDB.open();
+        Person currentPerson;
+        try {
+            // send info heroku to acknowledge the server that current user is running
+            currentPerson = personDB.getPerson(1); // get device user
+            ServerUtil.startRun(currentPerson.getName(), btMACAddress);
+        } catch (Exception e) {
+            // problem with getting person
+        }
+    }
+
+    // set Bluetooth
+    private void setupBluetooth() {
+        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+        mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
+
+//        ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
+//        newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
+
+        // Register for broadcasts when a device is discovered
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        this.registerReceiver(mReceiver, filter);
+
+        // Register for broadcasts when discovery has finished
+        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        this.registerReceiver(mReceiver, filter);
+
+        // make Bluetooth discoverable during run
+        ensureDiscoverable();
+    }
+
+    /**
+     * Makes this device discoverable.
+     */
+    private void ensureDiscoverable() {
+        if (mBtAdapter.getScanMode() != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 0);
+            startActivity(discoverableIntent);
+        }
+    }
+
+    /**
+     * Start device discover with the BluetoothAdapter
+     */
+    private void doDiscovery() {
+        // Indicate scanning in the title
+        setProgressBarIndeterminateVisibility(true);
+
+        // If we're already discovering, stop it
+        if (mBtAdapter.isDiscovering()) {
+            mBtAdapter.cancelDiscovery();
+        }
+
+        // Request discover from BluetoothAdapter
+        mBtAdapter.startDiscovery();
+    }
+
+    /**
+     * The BroadcastReceiver that listens for discovered devices and changes the title when
+     * discovery is finished
+     */
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final Intent i = intent;
+            new Thread(new Runnable() {
+                public void run() {
+                    String action = i.getAction();
+
+                    // When discovery finds a device
+                    if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                        // Get the BluetoothDevice object from the Intent
+                        BluetoothDevice device = i.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+
+                        // check if it exist in NewDevicesArrayAdapter
+                        if(mNewDevicesArrayAdapter.getPosition(device.getAddress()) != -1) {
+                            // already checked previously, ignore it
+                            return;
+                        }
+                        mNewDevicesArrayAdapter.add(device.getAddress());
+
+                        // check if it exist in personDB
+                        try {
+                            Person runPassFromDB = persondb.getPersonByRunPass(device.getAddress());
+                            // already exist in PersonTable, ignore
+                            return;
+                        } catch (Exception e) {
+                            // does not exist in DB, fallthrough
+                        }
+
+                        // check if runPassId is actual runner from heroku
+                        Person runPassPerson = null;
+                        try {
+                            runPassPerson = ServerUtil.getRunner(device.getAddress());
+                            if(runPassPerson.getId() == -1) return; // not a oneRun user
+                        } catch (Exception e) {
+                            // get person from server failed
+                        }
+
+                        // add runPass person to local db
+                        persondb.insertProfile(device.getAddress(), runPassPerson.getName(), runPassPerson.getAge(), runPassPerson.getWeight(), runPassPerson.getHeight());
+
+                        // When discovery is finished, change the Activity title
+                    } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                        // keep searching for bluetooth unless run is finished
+                        mBtAdapter.startDiscovery();
+                    }
+                }
+            }).start();
+        }
+    };
 
     private void setupDatabases() {
         rundb = new RunDataSource(this);
@@ -137,6 +276,7 @@ public class Running extends Activity implements
 
         rundb.open();
         mapdb.open();
+        persondb.open();
 
         int exercise = -1;
         switch (mExerciseType) {
@@ -318,8 +458,11 @@ public class Running extends Activity implements
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
+        ServerUtil.endRun(mBtAdapter.getAddress());
         mTimer.cancel();
         mapdb.close();
+        persondb.close();
+        mBtAdapter.cancelDiscovery();
     }
 
     @Override
@@ -340,6 +483,8 @@ public class Running extends Activity implements
                 mapdb.deleteAllMapsWithRun(runid);
                 dialog.dismiss();
                 mapdb.close();
+                persondb.close();
+                mBtAdapter.cancelDiscovery();
                 backPressed();
             }
 

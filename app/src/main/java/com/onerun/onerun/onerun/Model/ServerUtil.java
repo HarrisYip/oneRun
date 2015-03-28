@@ -22,9 +22,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -38,8 +40,8 @@ public class ServerUtil {
     private static String serverURL = "http://morning-citadel-9755.herokuapp.com";
     private static Person pers;
 
-    public static void startRun(String name, String macAddr){
-        final String n = name;
+    public static void startRun(String name, String macAddr) throws UnsupportedEncodingException {
+        final String n = URLEncoder.encode(name, "utf-8");
         final String m = macAddr;
         new Thread(new Runnable() {
             public void run() {
@@ -84,14 +86,14 @@ public class ServerUtil {
                         sb.append(line);
                     }
                     JSONObject json = new JSONObject(sb.toString());
-                    return new Person(0, 0, json.getString("username"), 0, 0.0, 0.0);
+                    return new Person(0, macAddr, json.getString("username"), 0, 0.0, 0.0);
 
                 } catch (Exception e) {
                     // writing exception to log
                     e.printStackTrace();
                 }
 
-        return new Person(-1, 0, "fail", 0, 0.0, 0.0);
+        return new Person(-1, "fail", "fail", 0, 0.0, 0.0);
     }
 
     private static void setPerson(Person p){

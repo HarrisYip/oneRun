@@ -105,6 +105,14 @@
             android:id="@+id/sumbit"
             android:gravity="center"
             android:text="Submit"/>
+
+        <!--<ListView-->
+            <!--android:id="@+id/new_devices"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="2"-->
+            <!--android:stackFromBottom="true"-->
+            <!--/>-->
     </RelativeLayout>
 
 

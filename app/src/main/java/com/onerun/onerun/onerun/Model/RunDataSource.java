@@ -167,6 +167,7 @@ public class RunDataSource {
                 new Date().getTime());
         cv.put(dbHelper.DISTANCE, distance);
         cv.put(dbHelper.AVERAGEPACE, pace);
+        cv.put(dbHelper.PACE, pace);
         writableDB.update(dbHelper.RUN, cv, where, null);
     }
 }

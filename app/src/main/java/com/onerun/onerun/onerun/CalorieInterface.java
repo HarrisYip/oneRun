@@ -8,6 +8,8 @@ import com.onerun.onerun.onerun.Model.Run;
 import com.onerun.onerun.onerun.Model.RunDataSource;
 import com.onerun.onerun.onerun.Model.SportDataSource;
 
+import java.util.Date;
+
 /**
  * Created by Terrence on 3/27/2015.
 */
@@ -44,12 +46,14 @@ public class CalorieInterface {
                 break;
         }
         double weight = myPerson.getWeight();
-        //TODO calculate duration
-        double duration = 60;
+        long endTime = myRun.getEndtime().getTime();
+        long startTime = myRun.getStarttime().getTime();
+        long difference = endTime - startTime;
+        double duration = (double)difference / 60000; // convert to minutes
 
         //store calorie count for this exercise
         myRun.setCalories(context.calc(duration, weight));
-
+        //Log.v("Calories Burned: ", String.valueOf(myRun.getCalories()));
         //close dbs
         runDataSource.close();
         personDataSource.close();

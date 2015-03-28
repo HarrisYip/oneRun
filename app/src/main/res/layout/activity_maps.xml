@@ -115,23 +115,23 @@
                     app:seriesColor="#ee0000" />
             </LinearLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Calories Burned:"
-                android:textColor="@color/black" />
-            <TextView
-                android:id="@+id/calorieCount"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:text="00000"
-                android:gravity="right"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Calories Burned:"
+                    android:textColor="@color/black" />
+                <TextView
+                    android:id="@+id/calorieCount"
+                    android:layout_width="match_parent"
+                    android:text="00000"
+                    android:gravity="right"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </ScrollView>

@@ -19,7 +19,7 @@
 
         android:gravity="center"
         android:paddingTop="32dp"
-        android:paddingBottom="32dp">
+        android:paddingBottom="0dp">
 
     <com.onerun.onerun.onerun.roundedimage
         android:layout_width="150dp"
@@ -29,49 +29,106 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Firstname Lastname"
-        android:id="@+id/personName"
-        android:layout_below="@+id/imageView"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Age"
-        android:id="@+id/personAge"
-        android:layout_below="@+id/personName"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Weight(kg)"
-        android:id="@+id/personWeight"
-        android:layout_below="@+id/personAge"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Height(cm)"
-        android:id="@+id/personHeight"
-        android:layout_below="@+id/personWeight"
-        android:layout_centerHorizontal="true" />
-
     </LinearLayout>
 
-    <TabWidget
-        android:id="@android:id/tabs"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentStart="true"></TabWidget>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="none"
+        android:layout_below="@+id/informations_container"
+        >
+
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Firstname Lastname"
+                    android:id="@+id/personName"
+                    android:layout_below="@+id/imageView"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Age"
+                    android:id="@+id/personAge"
+                    android:layout_below="@+id/personName"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"/>
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Weight(kg)"
+                    android:id="@+id/personWeight"
+                    android:layout_below="@+id/personAge"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="Height(cm)"
+                    android:id="@+id/personHeight"
+                    android:layout_below="@+id/personWeight"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"/>
+
+                <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:gravity="left"
+                android:textStyle="bold"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:padding="15dp"
+                android:background="@drawable/layer_card_background"
+                android:text="Friends"/>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/friendslist"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+        <!--<LinearLayout-->
+            <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="center"-->
+            <!-->-->
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="75dp"-->
+                <!--android:layout_gravity="top"-->
+                <!--android:gravity="left"-->
+                <!--android:layout_margin="15dp"-->
+                <!--android:padding="15dp"-->
+                <!--android:background="@drawable/layer_card_background"-->
+                <!--android:text="Friends"/>-->
+            <!---->
+        <!--</LinearLayout>-->
+
+        </ScrollView>
+        <!-- Here are the tabs, Just TextViews with a selector and a clickListener... -->
+        <!-- There is also two views at each edge with a gradient drawable making the fade effect. But I find this pretty ugly. -->
+
+    </RelativeLayout>
+
 </RelativeLayout>

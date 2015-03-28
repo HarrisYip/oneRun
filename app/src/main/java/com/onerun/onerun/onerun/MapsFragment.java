@@ -38,6 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class MapsFragment extends Fragment {
 
@@ -160,8 +161,8 @@ public class MapsFragment extends Fragment {
     private void updateCoord(){
         mMap.clear();
         double pace;
-        double latArray[];
-        double longArray[];
+        double latArray[] = null;
+        double longArray[] = null;
         RunDataSource runDB = new RunDataSource(getActivity());
         runDB.open();
 //        runDB.insertRun(0, new Date(10000000), new Date(200000000), 10, 10);
@@ -195,12 +196,14 @@ public class MapsFragment extends Fragment {
                 latArray[i] = myMap[i].getLatitude();
                 longArray[i] = myMap[i].getLongitude();
             }
-        } else {
-            latArray = new double[]{43.473209, 43.471870, 43.469507, 43.468697, 43.467911, 43.466603, 43.467335, 43.469173};
-            longArray = new double[]{-80.541670, -80.540039, -80.539275, -80.540155, -80.540455, -80.541171, -80.543489, -80.543961};
         }
 
         runDB.close();
+
+        if (latArray == null || latArray.length == 0){
+            latArray = new double[]{43.473209, 43.471870, 43.469507, 43.468697, 43.467911, 43.466603, 43.467335, 43.469173};
+            longArray = new double[]{-80.541670, -80.540039, -80.539275, -80.540155, -80.540455, -80.541171, -80.543489, -80.543961};
+        }
 
         //markers zoom etc.
         double latMin = latArray[0];
@@ -327,41 +330,43 @@ public class MapsFragment extends Fragment {
         mMapDB.open();
         Map myMap[] = mMapDB.getAllCoorForRun(r.getId());
         mMapDB.close();
-        DataPoint[] d = new DataPoint[myMap.length - 1];
-        double distance = 0;
+        if (myMap.length > 0) {
+            DataPoint[] d = new DataPoint[myMap.length - 1];
+            double distance = 0;
 
 
-        for(int i = 0; i < myMap.length - 1; i++){
-            double time = myMap[i + 1].getRunMilli()/100;
-            double dist = Measurements.distance(myMap[i].getLatitude(), myMap[i].getLongitude(), myMap[i + 1].getLatitude(), myMap[i + 1].getLongitude(), "K");
-            if (!Double.isNaN(dist)){
-                distance += dist;
+            for (int i = 0; i < myMap.length - 1; i++) {
+                double time = myMap[i + 1].getRunMilli() / 100;
+                double dist = Measurements.distance(myMap[i].getLatitude(), myMap[i].getLongitude(), myMap[i + 1].getLatitude(), myMap[i + 1].getLongitude(), "K");
+                if (!Double.isNaN(dist)) {
+                    distance += dist;
+                }
+                Log.d("[AYO]", time + " " + distance + " " + myMap[i].getLatitude() + " " + myMap[i].getLongitude() + " " + myMap[i + 1].getLatitude() + " " + myMap[i + 1].getLongitude());
+                d[i] = new DataPoint(time, time / distance);
             }
-            Log.d("[AYO]", time + " " + distance + " " + myMap[i].getLatitude() + " " + myMap[i].getLongitude() + " " + myMap[i + 1].getLatitude() + " " + myMap[i + 1].getLongitude());
-            d[i] = new DataPoint(time, time/distance);
-        }
 
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(e);
-        graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(r.getPace() * 3);
-        graph.removeAllSeries();
-        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<DataPoint>(d);
-        //Paint paint = new Paint();
-        //paint.setStyle(Paint.Style.STROKE);
-        //paint.setStrokeWidth(10);
-        //paint.setPathEffect(new DashPathEffect(new float[]{8, 5}, 0));
-        //series1.setCustomPaint(paint);
-        series2.setColor(Color.RED);
-        graph.addSeries(series1);
-        graph.addSeries(series2);
+            graph.getViewport().setXAxisBoundsManual(true);
+            graph.getViewport().setYAxisBoundsManual(true);
+            graph.getViewport().setMinX(0);
+            graph.getViewport().setMaxX(e);
+            graph.getViewport().setMinY(0);
+            graph.getViewport().setMaxY(r.getPace() * 3);
+            graph.removeAllSeries();
+            LineGraphSeries<DataPoint> series2 = new LineGraphSeries<DataPoint>(d);
+            //Paint paint = new Paint();
+            //paint.setStyle(Paint.Style.STROKE);
+            //paint.setStrokeWidth(10);
+            //paint.setPathEffect(new DashPathEffect(new float[]{8, 5}, 0));
+            //series1.setCustomPaint(paint);
+            series2.setColor(Color.RED);
+            graph.addSeries(series1);
+            graph.addSeries(series2);
+        }
     }
 
     private void setUpMap(){
-        double latArray[];
-        double longArray[];
+        double latArray[] = null;
+        double longArray[] = null;
         RunDataSource runDB = new RunDataSource(getActivity());
         runDB.open();
 //        runDB.insertRun(0, new Date(10000000), new Date(200000000), 10, 10);
@@ -392,7 +397,9 @@ public class MapsFragment extends Fragment {
                 latArray[i] = myMap[i].getLatitude();
                 longArray[i] = myMap[i].getLongitude();
             }
-        } else {
+        }
+
+        if (latArray == null || latArray.length == 0){
             latArray = new double[]{43.473209, 43.471870, 43.469507, 43.468697, 43.467911, 43.466603, 43.467335, 43.469173};
             longArray = new double[]{-80.541670, -80.540039, -80.539275, -80.540155, -80.540455, -80.541171, -80.543489, -80.543961};
         }

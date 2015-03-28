@@ -53,14 +53,14 @@ public class Running extends Activity implements
     private int mMilli = 0;
     private int totalMilli = 0;
     private int pace = 60;
-    private long mAveragePace = 0;
+    private double mAveragePace = 0;
     private int mCadence = -1;
     private int mPaceMin = -1;
     private int mPaceSec = -1;
     private int mIntervalMin = -1;
     private int mIntervalSec = -1;
     private int mInterval = -1;
-    private long mDistance = 0;
+    private double mDistance = 0;
     private long runid;
     private boolean mGhostRun = false;
     private int mGhostRunId;
@@ -70,7 +70,7 @@ public class Running extends Activity implements
 
     GoogleApiClient mGoogleApiClient;
     LocationRequest mLocationRequest;
-    Location mBestReading;
+    Location mBestReading = null;
 
     RunDataSource rundb;
     MapDataSource mapdb;
@@ -112,7 +112,6 @@ public class Running extends Activity implements
             mInterval = ((mIntervalMin * 60) + mIntervalSec) * 100;
 
         }
-
         createLocationRequest();
         setContentView(R.layout.activity_running);
 

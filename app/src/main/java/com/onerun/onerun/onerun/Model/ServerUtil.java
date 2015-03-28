@@ -86,14 +86,14 @@ public class ServerUtil {
                         sb.append(line);
                     }
                     JSONObject json = new JSONObject(sb.toString());
-                    return new Person(0, macAddr, json.getString("username"), 0, 0.0, 0.0);
+                    return new Person(0, macAddr, json.getString("username"), 0, 0.0, 0.0, false);
 
                 } catch (Exception e) {
                     // writing exception to log
                     e.printStackTrace();
                 }
 
-        return new Person(-1, "fail", "fail", 0, 0.0, 0.0);
+        return new Person(-1, "fail", "fail", 0, 0.0, 0.0, false);
     }
 
     private static void setPerson(Person p){

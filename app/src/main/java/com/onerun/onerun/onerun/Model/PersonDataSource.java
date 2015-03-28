@@ -99,6 +99,7 @@ public class PersonDataSource {
             int ageIndex = cursor.getColumnIndexOrThrow(dbHelper.AGE);
             int weightIndex = cursor.getColumnIndexOrThrow(dbHelper.WEIGHT);
             int heightIndex = cursor.getColumnIndexOrThrow(dbHelper.HEIGHT);
+            int boolIndex = cursor.getColumnIndexOrThrow(dbHelper.RUNPASSBOOL);
 
             int pId = Integer.parseInt(cursor.getString(personidIndex));
             String pRunpassid = cursor.getString(runpassidIndex);
@@ -106,8 +107,9 @@ public class PersonDataSource {
             int pAge = Integer.parseInt(cursor.getString(ageIndex));
             double pWeight = Double.parseDouble(cursor.getString(weightIndex));
             double pHeight = Double.parseDouble(cursor.getString(heightIndex));
+            boolean pBool = Boolean.parseBoolean(cursor.getString(boolIndex));
 
-            person = new Person(pId, pRunpassid, pName, pAge, pWeight, pHeight, false);
+            person = new Person(pId, pRunpassid, pName, pAge, pWeight, pHeight, pBool);
         } catch (Exception e) {
             person = new Person(-1, "fail", "fail", 0, 0, 0, false);
         }

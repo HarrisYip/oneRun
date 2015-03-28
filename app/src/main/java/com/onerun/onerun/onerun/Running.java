@@ -258,7 +258,7 @@ public class Running extends Activity implements
                         }
 
                         // add runPass person to local db
-                        persondb.insertProfile(device.getAddress(), runPassPerson.getName(), runPassPerson.getAge(), runPassPerson.getWeight(), runPassPerson.getHeight());
+                        persondb.insertProfile(device.getAddress(), runPassPerson.getName(), runPassPerson.getAge(), runPassPerson.getWeight(), runPassPerson.getHeight(), false);
 
                         // When discovery is finished, change the Activity title
                     } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {

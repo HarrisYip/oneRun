@@ -208,8 +208,8 @@ public class WorkoutSetFragment extends Fragment {
 
     private void setUpMap(int runId){
         mMap.clear();
-        double latArray[];
-        double longArray[];
+        double latArray[] = null;
+        double longArray[] = null;
         RunDataSource runDB = new RunDataSource(getActivity());
         runDB.open();
         if (runId > 0) {
@@ -225,7 +225,8 @@ public class WorkoutSetFragment extends Fragment {
                 latArray[i] = myMap[i].getLatitude();
                 longArray[i] = myMap[i].getLongitude();
             }
-        } else {
+        }
+        if(latArray == null || latArray.length == 0) {
             latArray = new double[]{43.473209, 43.471870, 43.469507, 43.468697, 43.467911, 43.466603, 43.467335, 43.469173};
             longArray = new double[]{-80.541670, -80.540039, -80.539275, -80.540155, -80.540455, -80.541171, -80.543489, -80.543961};
         }

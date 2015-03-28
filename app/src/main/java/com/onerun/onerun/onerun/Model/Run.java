@@ -11,15 +11,17 @@ public class Run {
     private Date starttime;
     private Date endtime;
     private double pace;
+    private double averagePace;
     private double distance;
     private double calories;
 
-    public Run(int id, int sportid, Date starttime, Date endtime, double pace, double distance, double calories) {
+    public Run(int id, int sportid, Date starttime, Date endtime, double pace, double averagePace, double distance, double calories) {
         this.id = id;
         this.sportid = sportid;
         this.starttime = starttime;
         this.endtime = endtime;
         this.pace = pace;
+        this.averagePace = averagePace;
         this.distance = distance;
         this.calories = calories;
     }

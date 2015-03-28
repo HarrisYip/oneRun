@@ -36,10 +36,11 @@ public class DataAccessHelper extends SQLiteOpenHelper {
     public static final String STARTTIME = "starttime"; // long milliseconds
     public static final String ENDTIME = "endtime"; // long milliseconds
     public static final String PACE = "pace";
+    public static final String AVERAGEPACE = "averagePace";
     public static final String DISTANCE = "distance";
     public static final String CALORIES = "calories";
 
-    private static final String CREATE_RUN_TABLE = "CREATE TABLE " + RUN + " (" + KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " + SPORTID + " INT, " + STARTTIME + " INT, " + ENDTIME + " INT, " + PACE + " REAL, " + DISTANCE + " REAL, " + CALORIES + " REAL);";
+    private static final String CREATE_RUN_TABLE = "CREATE TABLE " + RUN + " (" + KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " + SPORTID + " INT, " + STARTTIME + " INT, " + ENDTIME + " INT, " + PACE + " REAL, " + AVERAGEPACE + " REAL, " + DISTANCE + " REAL, " + CALORIES + " REAL);";
     private static final String DROP_RUN_TABLE = "DROP TABLE IF EXISTS " + RUN;
 
     // Map Table

@@ -32,12 +32,13 @@ public class RunDataSource {
         dbHelper.close();
     }
 
-    public long insertRun(int sportid, Date starttime, Date endtime, double pace, double distance, double calories) {
+    public long insertRun(int sportid, Date starttime, Date endtime, double pace, double averagePace, double distance, double calories) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(dbHelper.SPORTID, sportid);
         contentValues.put(dbHelper.STARTTIME, starttime.getTime()); // convert to milliseconds (long)
         contentValues.put(dbHelper.ENDTIME, endtime.getTime()); // convert to milliseconds (long)
         contentValues.put(dbHelper.PACE, pace);
+        contentValues.put(dbHelper.AVERAGEPACE, averagePace);
         contentValues.put(dbHelper.DISTANCE, distance);
         contentValues.put(dbHelper.CALORIES, calories);
 
@@ -61,6 +62,7 @@ public class RunDataSource {
         int starttimeIndex = cursor.getColumnIndexOrThrow(dbHelper.STARTTIME);
         int endtimeIndex = cursor.getColumnIndexOrThrow(dbHelper.ENDTIME);
         int paceIndex = cursor.getColumnIndexOrThrow(dbHelper.PACE);
+        int averageIndex = cursor.getColumnIndexOrThrow(dbHelper.AVERAGEPACE);
         int distanceIndex = cursor.getColumnIndexOrThrow(dbHelper.DISTANCE);
         int caloriesIndex = cursor.getColumnIndexOrThrow(dbHelper.CALORIES);
 
@@ -71,10 +73,11 @@ public class RunDataSource {
         long rEndtimeMilliseconds = Long.parseLong(cursor.getString(endtimeIndex));
         Date rEndtimeDate = new Date(rEndtimeMilliseconds);
         double rPace = Double.parseDouble(cursor.getString(paceIndex));
+        double rAveragePace = Double.parseDouble(cursor.getString(averageIndex));
         double rDistance = Double.parseDouble(cursor.getString(distanceIndex));
         double rCalories = Double.parseDouble(cursor.getString(caloriesIndex));
 
-        return new Run(rId, rSportid, rStarttimeDate, rEndtimeDate, rPace, rDistance, rCalories);
+        return new Run(rId, rSportid, rStarttimeDate, rEndtimeDate, rPace, rAveragePace, rDistance, rCalories);
     }
 
     public Run getRun(int id) {
@@ -157,11 +160,13 @@ public class RunDataSource {
         return runs;
     }
 
-    public void trackEndRunNow(int id){
+    public void trackEndRunNow(int id, double distance, double pace){
         String where = dbHelper.KEY + "=" + id;
         ContentValues cv = new ContentValues();
         cv.put(dbHelper.ENDTIME,
                 new Date().getTime());
+        cv.put(dbHelper.DISTANCE, distance);
+        cv.put(dbHelper.AVERAGEPACE, pace);
         writableDB.update(dbHelper.RUN, cv, where, null);
     }
 }

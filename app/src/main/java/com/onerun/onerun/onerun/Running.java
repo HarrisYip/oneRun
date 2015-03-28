@@ -26,8 +26,8 @@ import com.google.android.gms.location.LocationServices;
 import com.onerun.onerun.onerun.Model.Map;
 import com.onerun.onerun.onerun.Model.MapDataSource;
 import com.onerun.onerun.onerun.Model.PersonDataSource;
+import com.onerun.onerun.onerun.Model.Run;
 import com.onerun.onerun.onerun.Model.RunDataSource;
-import com.onerun.onerun.onerun.Model.SportDataSource;
 
 import java.io.IOException;
 import java.util.Date;
@@ -64,10 +64,11 @@ public class Running extends Activity implements
     private int mInterval = -1;
     private double mDistance = 0;
     private long runid;
-    private boolean mGhostRun = false;
+    private boolean mGhostRunSet = false;
     private int mGhostRunId;
     private String mExerciseType;
     private Map[] mGhostMapCoor;
+    private Run mGhostRun;
 
 
     GoogleApiClient mGoogleApiClient;
@@ -104,7 +105,7 @@ public class Running extends Activity implements
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mCadence = extras.getInt(WorkoutSetFragment.CADENCE);
-            mGhostRun = extras.getBoolean(WorkoutSetFragment.GHOSTRUN);
+            mGhostRunSet = extras.getBoolean(WorkoutSetFragment.GHOSTRUN);
             mGhostRunId = extras.getInt(WorkoutSetFragment.GHOSTRUN_ID);
             mExerciseType = extras.getString(WorkoutSetFragment.EXERCISE);
             mPaceMin = extras.getInt(WorkoutSetFragment.PACEMIN);
@@ -149,10 +150,11 @@ public class Running extends Activity implements
                 break;
         }
 
-        runid = rundb.insertRun(exercise,new Date(),new Date(),pace,0, 0); // TODO: change _sportID depending on what sports
+        runid = rundb.insertRun(exercise, new Date(), new Date(), pace, pace, 0, 0); // TODO: change _sportID depending on what sports
 
-        if (mGhostRun) {
+        if (mGhostRunSet) {
             mGhostMapCoor = mapdb.getAllCoorForRun(mGhostRunId);
+            mGhostRun = rundb.getRun(mGhostRunId);
         }
         rundb.close();
     }
@@ -204,11 +206,27 @@ public class Running extends Activity implements
 
     private void checkCurrentPace() {
         //TODO:Text to speech
+        String speak = "";
+        int averageMin = (int)mAveragePace/60;
+        int averageSeconds = (int)mAveragePace%60;
+        if (mAveragePace < pace - 5) {
+           speak += "You are going too fast, your pace is " + averageMin + " minutes and " + averageSeconds + " seconds.";
+        } else if (mAveragePace > pace + 5) {
+           speak += "You are going too slow, your pace is " + averageMin + " minutes and " + averageSeconds + " seconds.";
+        }
 
-        if (mAveragePace > pace + 5) {
-            mTts.speak("You are going too fast, your pace is " + mAveragePace, mTts.QUEUE_FLUSH, null);
-        } else if (mAveragePace < pace - 5) {
-            mTts.speak("You are going too slow, your pace is " + mAveragePace, mTts.QUEUE_FLUSH, null);
+        if (mGhostRunSet) {
+            if (mAveragePace > mGhostRun.getPace() + 5) {
+                speak += "You are slower than your ghost";
+            } else if (mAveragePace < mGhostRun.getPace() - 5) {
+                speak += "You are faster than your ghost";
+            } else {
+                speak += "You are keeping up with your ghost";
+            }
+        }
+
+        if(!speak.isEmpty()) {
+            mTts.speak(speak, mTts.QUEUE_FLUSH, null);
         }
     }
 
@@ -229,7 +247,7 @@ public class Running extends Activity implements
                 }
                 rundb.open();
                 int rid = rundb.getLastRunID();
-                rundb.trackEndRunNow(rid);
+                rundb.trackEndRunNow(rid, mDistance, mAveragePace);
                 rundb.close();
                 // calculate calories
                 CalorieInterface calorieInterface = new CalorieInterface();

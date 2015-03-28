@@ -143,4 +143,25 @@ public class PersonDataSource {
         }
         return ret;
     }
+
+    public int[] getAllPeople(){
+        String query = ("SELECT " + dbHelper.KEY + " FROM " + dbHelper.PERSON);
+        Cursor cursor = readableDB.rawQuery(query, null);
+        int cursorSize = cursor.getCount();
+        int personIds[] = new int[cursorSize];
+
+        // get all runids
+        if (cursor != null) {
+            cursor.moveToFirst();
+            for (int i = 0; i < cursorSize; i++) {
+                int idIndex = cursor.getColumnIndexOrThrow(dbHelper.KEY);
+                int runid = Integer.parseInt(cursor.getString(idIndex));
+                personIds[i] = runid;
+                cursor.moveToNext();
+            }
+        }
+
+        cursor.close();
+        return personIds;
+    }
 }

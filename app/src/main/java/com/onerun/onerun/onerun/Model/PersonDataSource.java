@@ -29,13 +29,14 @@ public class PersonDataSource {
         dbHelper.close();
     }
 
-    public long insertProfile(String runpassid, String name, int age, double weight, double height) {
+    public long insertProfile(String runpassid, String name, int age, double weight, double height, boolean runPass) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(dbHelper.RUNPASSID, runpassid);
         contentValues.put(dbHelper.NAME, name);
         contentValues.put(dbHelper.AGE, age);
         contentValues.put(dbHelper.WEIGHT, weight);
         contentValues.put(dbHelper.HEIGHT, height);
+        contentValues.put(dbHelper.RUNPASSBOOL, runPass);
 
         // returns negative id if error
         long id = writableDB.insert(dbHelper.PERSON, null, contentValues);
@@ -64,14 +65,15 @@ public class PersonDataSource {
         int ageIndex = cursor.getColumnIndexOrThrow(dbHelper.AGE);
         int weightIndex = cursor.getColumnIndexOrThrow(dbHelper.WEIGHT);
         int heightIndex = cursor.getColumnIndexOrThrow(dbHelper.HEIGHT);
+        int runPassIndex = cursor.getColumnIndexOrThrow(dbHelper.RUNPASSBOOL);
 
         String pRunpassid = cursor.getString(runpassidIndex);
         String pName = cursor.getString(nameIndex);
         int pAge = Integer.parseInt(cursor.getString(ageIndex));
         double pWeight = Double.parseDouble(cursor.getString(weightIndex));
         double pHeight = Double.parseDouble(cursor.getString(heightIndex));
-
-        Person person = new Person(id, pRunpassid, pName, pAge, pWeight, pHeight);
+        boolean pRunPass = Boolean.parseBoolean(cursor.getString(runPassIndex));
+        Person person = new Person(id, pRunpassid, pName, pAge, pWeight, pHeight, pRunPass);
 
         // close cursor
         cursor.close();
@@ -105,9 +107,9 @@ public class PersonDataSource {
             double pWeight = Double.parseDouble(cursor.getString(weightIndex));
             double pHeight = Double.parseDouble(cursor.getString(heightIndex));
 
-            person = new Person(pId, pRunpassid, pName, pAge, pWeight, pHeight);
+            person = new Person(pId, pRunpassid, pName, pAge, pWeight, pHeight, false);
         } catch (Exception e) {
-            person = new Person(-1, "fail", "fail", 0, 0, 0);
+            person = new Person(-1, "fail", "fail", 0, 0, 0, false);
         }
         // close cursor
         cursor.close();
@@ -127,6 +129,7 @@ public class PersonDataSource {
         contentValues.put(dbHelper.AGE, editPerson.getAge());
         contentValues.put(dbHelper.WEIGHT, editPerson.getWeight());
         contentValues.put(dbHelper.HEIGHT, editPerson.getHeight());
+        contentValues.put(dbHelper.RUNPASSBOOL, editPerson.getRunPass());
 
         int status = writableDB.update(table, contentValues, where, null);
         if(status == 1) {

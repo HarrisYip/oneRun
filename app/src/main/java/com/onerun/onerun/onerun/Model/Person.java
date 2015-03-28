@@ -10,14 +10,16 @@ public class Person {
     private int age;
     private double height;
     private double weight;
+    private boolean runPass;
 
-    public Person(int id, String runpassid, String name, int age, double weight, double height) {
+    public Person(int id, String runpassid, String name, int age, double weight, double height, boolean runPass) {
         this.id = id;
         this.runpassid = runpassid;
         this.name = name;
         this.age = age;
         this.height = height;
         this.weight = weight;
+        this.runPass = runPass;
     }
 
     public int getId() {
@@ -67,4 +69,8 @@ public class Person {
     public void setWeight(double weight) {
         this.weight = weight;
     }
+
+    public boolean getRunPass() { return runPass; }
+
+    public void setRunPass(boolean runPass) { this.runPass = runPass; }
 }

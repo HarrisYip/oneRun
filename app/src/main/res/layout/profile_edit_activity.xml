@@ -93,6 +93,21 @@
                 android:layout_column="1" />
         </TableRow>
 
+        <TableRow>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/runPassEdit"
+                android:layout_column="0"
+                android:text="RunPass: "
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+            <ToggleButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:id="@+id/runPassToggle" />
+        </TableRow>
+
         <TableRow
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">

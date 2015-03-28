@@ -26,8 +26,8 @@ public class DataAccessHelper extends SQLiteOpenHelper {
     public static final String AGE = "age";
     public static final String WEIGHT = "weight"; // KG
     public static final String HEIGHT = "height"; // CM
-
-    private static final String CREATE_PERSON_TABLE = "CREATE TABLE " + PERSON + " (" + KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " + RUNPASSID + " INT, " + NAME + " VARCHAR(255), " + AGE + " INT, " + WEIGHT + " REAL, " + HEIGHT + " REAL);";
+    public static final String RUNPASSBOOL = "runpass";
+    private static final String CREATE_PERSON_TABLE = "CREATE TABLE " + PERSON + " (" + KEY + " INTEGER PRIMARY KEY AUTOINCREMENT, " + RUNPASSID + " INT, " + NAME + " VARCHAR(255), " + AGE + " INT, " + WEIGHT + " REAL, " + HEIGHT + " REAL, " + RUNPASSBOOL + " BOOLEAN);";
     private static final String DROP_PERSON_TABLE = "DROP TABLE IF EXISTS" + PERSON;
 
     // Run Table

@@ -128,18 +128,6 @@ public class Running extends Activity implements
 
         setupDatabases();
 
-        /*new Thread(new Runnable() {
-            public void run() {
-                try {
-                    Person p = ServerUtil.getRunner("00:00:00:00:00:00");
-                    String n = p.getName();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();*/
-        ServerUtil.endRun("00:00:00:00:00:00");
-
     }
 
     private void setupDatabases() {

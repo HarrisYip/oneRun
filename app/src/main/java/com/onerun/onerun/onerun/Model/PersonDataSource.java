@@ -87,7 +87,7 @@ public class PersonDataSource {
 
     public Person getPersonByRunPass(String MAC) {
         // open cursor
-        String where = dbHelper.RUNPASSID + "=" + MAC;
+        String where = dbHelper.RUNPASSID + "='" + MAC + "'";
         Cursor cursor = readableDB.query(dbHelper.PERSON, null, where, null, null, null, null);
 
         if (cursor != null) {

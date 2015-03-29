@@ -251,12 +251,8 @@ public class Running extends Activity implements
                         mNewDevicesArrayAdapter.add(device.getAddress());
 
                         // check if it exist in personDB
-                        try {
-                            Person runPassFromDB = persondb.getPersonByRunPass(device.getAddress());
-                            // already exist in PersonTable, ignore
+                        if(persondb.getPersonByRunPass(device.getAddress()).getId() != -1) {
                             return;
-                        } catch (Exception e) {
-                            // does not exist in DB, fallthrough
                         }
 
                         // check if runPassId is actual runner from heroku

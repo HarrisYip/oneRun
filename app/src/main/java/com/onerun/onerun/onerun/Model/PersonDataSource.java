@@ -72,7 +72,11 @@ public class PersonDataSource {
         int pAge = Integer.parseInt(cursor.getString(ageIndex));
         double pWeight = Double.parseDouble(cursor.getString(weightIndex));
         double pHeight = Double.parseDouble(cursor.getString(heightIndex));
-        boolean pRunPass = Boolean.parseBoolean(cursor.getString(runPassIndex));
+        boolean pRunPass = false;
+        String booleanString = cursor.getString(runPassIndex);
+        if(booleanString.compareTo("1") == 0) {
+            pRunPass = true;
+        }
         Person person = new Person(id, pRunpassid, pName, pAge, pWeight, pHeight, pRunPass);
 
         // close cursor

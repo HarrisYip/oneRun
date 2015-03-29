@@ -63,6 +63,9 @@ public class Running extends Activity implements
     // person db connection
     private PersonDataSource personDB;
 
+    // runpass bolean
+    boolean runPassBoolean = false;
+
     TextView mLocationTextView;
     TextView mMilliTextView;
     TextView mSecondsTextView;
@@ -145,9 +148,17 @@ public class Running extends Activity implements
         setupTimer();
         setupDatabases();
 
-        setupBluetooth(); // run this before setup runpass profile
-        setupRunPassProfile(); // requires bluetooth to be set up first (needs to know bluetooth MAC address)
-        doDiscovery();
+        // runpass activate
+        PersonDataSource personDB = new PersonDataSource(this);
+        personDB.open();
+        Person myPerson = personDB.getPerson(1);
+        runPassBoolean = myPerson.getRunPass();
+        personDB.close();
+        if(runPassBoolean) {
+            setupBluetooth(); // run this before setup runpass profile
+            setupRunPassProfile(); // requires bluetooth to be set up first (needs to know bluetooth MAC address)
+            doDiscovery();
+        }
     }
 
     // send profile information to heroku to know that I am running
@@ -459,11 +470,13 @@ public class Running extends Activity implements
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
             mGoogleApiClient.disconnect();
         }
-        ServerUtil.endRun(mBtAdapter.getAddress());
         mTimer.cancel();
         mapdb.close();
         persondb.close();
-        mBtAdapter.cancelDiscovery();
+        if(runPassBoolean) {
+            ServerUtil.endRun(mBtAdapter.getAddress());
+            mBtAdapter.cancelDiscovery();
+        }
     }
 
     @Override
@@ -485,7 +498,10 @@ public class Running extends Activity implements
                 dialog.dismiss();
                 mapdb.close();
                 persondb.close();
-                mBtAdapter.cancelDiscovery();
+                if(runPassBoolean) {
+                    ServerUtil.endRun(mBtAdapter.getAddress());
+                    mBtAdapter.cancelDiscovery();
+                }
                 backPressed();
             }
 

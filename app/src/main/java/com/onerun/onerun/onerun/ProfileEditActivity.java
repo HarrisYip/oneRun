@@ -22,7 +22,7 @@ public class ProfileEditActivity extends Activity {
     private EditText mHeightEditText;
     private ToggleButton mRunPassToggle;
     private Button mSaveButton;
-    private boolean runPassBool = false;
+    //private boolean runPassBool = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +36,6 @@ public class ProfileEditActivity extends Activity {
         mRunPassToggle = (ToggleButton) findViewById(R.id.runPassToggle);
         mSaveButton = (Button) findViewById(R.id.saveButton);
 
-
-        // get db connection
-//        personDB = new PersonDataSource(this);
         personDB = new PersonDataSource(getApplicationContext());
         personDB.open();
 
@@ -52,16 +49,16 @@ public class ProfileEditActivity extends Activity {
             mHeightEditText.setText(String.valueOf(currentPerson.getHeight()));
             mRunPassToggle.setChecked(currentPerson.getRunPass());
 
-            mRunPassToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        runPassBool = true;
-                    } else {
-                        runPassBool = false;
-                    }
-                }
-            });
+//            mRunPassToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//
+//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                    if (isChecked) {
+//                        runPassBool = true;
+//                    } else {
+//                        runPassBool = false;
+//                    }
+//                }
+//            });
 
             mSaveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -73,7 +70,7 @@ public class ProfileEditActivity extends Activity {
                     editPerson.setAge(Integer.parseInt(mAgeEditText.getText().toString()));
                     editPerson.setWeight(Double.parseDouble(mWeightEditText.getText().toString()));
                     editPerson.setHeight(Double.parseDouble(mHeightEditText.getText().toString()));
-                    editPerson.setRunPass(runPassBool);
+                    editPerson.setRunPass(mRunPassToggle.isChecked());
 
                     boolean status = personDB.updatePerson(editPerson);
                     personDB.close();
@@ -95,7 +92,8 @@ public class ProfileEditActivity extends Activity {
                     int age = Integer.parseInt(mAgeEditText.getText().toString());
                     double weight = Double.parseDouble(mWeightEditText.getText().toString());
                     double height = Double.parseDouble(mHeightEditText.getText().toString());
-                    long id = personDB.insertProfile("-1",name, age, weight, height, runPassBool); // TODO: change _runpassID for runpass
+                    boolean runpassboolean = mRunPassToggle.isChecked();
+                    long id = personDB.insertProfile("-1",name, age, weight, height, runpassboolean);
                     personDB.close();
                     if (id >= 0) {
                         ToastMessage.message(getApplicationContext(), "Profile Created");

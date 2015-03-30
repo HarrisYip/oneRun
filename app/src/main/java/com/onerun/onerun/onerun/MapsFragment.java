@@ -167,6 +167,8 @@ public class MapsFragment extends Fragment {
     }
 
     private void updateCalories() {
+        if(currentRun == 0) return;
+
         RunDataSource runDB = new RunDataSource(getActivity());
         runDB.open();
         Run lastRun = runDB.getRun(currentRun);

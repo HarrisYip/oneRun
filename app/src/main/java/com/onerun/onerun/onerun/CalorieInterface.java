@@ -52,7 +52,9 @@ public class CalorieInterface {
         double duration = (double)difference / 60000; // convert to minutes
 
         //store calorie count for this exercise
-        myRun.setCalories(context.calc(duration, weight));
+        double calories = context.calc(duration, weight);
+        myRun.setCalories(calories);
+        runDataSource.updateRunCalories(myRun);
         //Log.v("Calories Burned: ", String.valueOf(myRun.getCalories()));
         //close dbs
         runDataSource.close();

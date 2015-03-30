@@ -97,6 +97,8 @@ public class MapsFragment extends Fragment {
 
         setUpMapIfNeeded();
 
+        updateCalories();
+
 
         return rootView;
     }

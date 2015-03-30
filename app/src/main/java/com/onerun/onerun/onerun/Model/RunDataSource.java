@@ -47,6 +47,21 @@ public class RunDataSource {
         return id;
     }
 
+    public boolean updateRunCalories(Run myRun) {
+        boolean ret = false;
+        String table = dbHelper.RUN;
+        String where = dbHelper.KEY + "=" + myRun.getId();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(dbHelper.CALORIES, myRun.getCalories());
+
+        int status = writableDB.update(table, contentValues, where, null);
+        if(status == 1) {
+            ret = true;
+        }
+        return ret;
+    }
+
     public long deleteRun(long id) {
         String table = dbHelper.RUN;
         String where = dbHelper.KEY + "=" + id;

@@ -1,21 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="8dp"
-    android:paddingRight="8dp"
-    android:paddingTop="8dp"
+    android:layout_height="match_parent" android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
     android:paddingBottom="8dp"
     tools:context="com.onerun.onerun.onerun.Running">
 
     <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:background="@drawable/exercisehdpi">
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="START"
+            android:textSize="50sp"
+            android:layout_margin="5dp"
+            android:id="@+id/start"
+            android:background="@android:color/transparent"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="8dp"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@drawable/layer_card_background"
+            android:padding="15dp"
+            >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -41,7 +71,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@drawable/layer_card_background"
+            android:padding="15dp"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -62,6 +95,16 @@
                 android:id="@+id/intervalSetSec"/>
 
         </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/layer_card_background"
+                android:padding="15dp"
+                android:layout_marginTop="5dp">
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -98,6 +141,15 @@
                 android:visibility="gone"/>
 
         </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/layer_card_background"
+            android:padding="15dp"
+            android:layout_marginTop="5dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -111,52 +163,60 @@
             android:layout_height="wrap_content"
             android:id="@+id/ghostRunSet"/>
 
-        <fragment
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:id="@+id/ghostMap"
-            android:name="com.google.android.gms.maps.SupportMapFragment" />
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/ghostMap"
+                android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-        <LinearLayout
-            android:id="@+id/ghostRunSelector"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:visibility="gone">
 
-            <ImageButton
-                android:padding="10dip"
-                android:id="@+id/left_ghost_button"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/ghostRunSelector"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="@null"
-                android:src="@drawable/ic_action_previous_item" />
+                android:orientation="horizontal"
+                android:visibility="gone">
 
-            <TextView
-                android:id="@+id/ghost_run_name"
-                android:layout_width="0dip"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="5dip"
-                android:gravity="center"
-                android:textSize="8pt"
-                android:text="textview" />
+                <ImageButton
+                    android:padding="10dip"
+                    android:id="@+id/left_ghost_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:background="@null"
+                    android:src="@drawable/ic_action_previous_item" />
 
-            <ImageButton
-                android:padding="10dip"
-                android:id="@+id/right_ghost_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:background="@null"
-                android:src="@drawable/ic_action_next_item" />
+                <TextView
+                    android:id="@+id/ghost_run_name"
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="5dip"
+                    android:gravity="center"
+                    android:textSize="8pt"
+                    android:text="textview" />
+
+                <ImageButton
+                    android:padding="10dip"
+                    android:id="@+id/right_ghost_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:background="@null"
+                    android:src="@drawable/ic_action_next_item" />
+            </LinearLayout>
+
         </LinearLayout>
 
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:background="@drawable/layer_card_background"
+            android:padding="15dp"
+            android:layout_marginTop="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -175,27 +235,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="TODO: NEW RUN INFO HERE"
-                android:id="@+id/newRun"
-                android:layout_above="@+id/start"
-                android:layout_centerHorizontal="true" />
 
 
-            <Button
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="START"
-                android:textSize="50sp"
-                android:id="@+id/start"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
 
+    </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

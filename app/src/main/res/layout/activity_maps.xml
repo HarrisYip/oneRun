@@ -17,7 +17,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:orientation="horizontal" >
+        android:layout_margin="5dp"
+        android:orientation="horizontal"
+        android:background="@drawable/layer_card_background">
 
         <ImageButton
             android:padding="10dip"
@@ -49,29 +51,37 @@
 
     </LinearLayout>
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"/>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_weight="0.5">
 
         <LinearLayout
-            android:padding="5sp"
+            android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:id="@+id/mapInfo"
             android:layout_weight="1"
             android:visibility="visible"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/layer_card_background"
+                android:layout_marginBottom="5dp"
+                android:padding="5dp"
+                >
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -89,7 +99,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -102,34 +114,67 @@
                     android:gravity="right"
                     android:layout_height="wrap_content" />
             </LinearLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="@drawable/layer_card_background"
+                android:padding="0dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:textColor="@color/black"
+                    android:text="Pace:"/>
+
                 <com.jjoe64.graphview.helper.GraphViewXML
                     android:id="@+id/pace_graph"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="100dip"
                     app:seriesData="0=0 "
                     app:seriesType="line"
-                    app:seriesColor="#ee0000" />
+                    app:seriesColor="#ee0000"
+                    android:layout_margin="3dp"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/layer_card_background">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Calories Burned:"
                     android:textColor="@color/black" />
-                <TextView
-                    android:id="@+id/calorieCount"
-                    android:layout_width="match_parent"
-                    android:text="00000"
-                    android:gravity="right"
-                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    >
+                    <TextView
+                        android:id="@+id/calorieCount"
+                        android:layout_width="fill_parent"
+                        android:layout_weight=".6"
+                        android:text="00000"
+                        android:textSize="30pt"
+                        android:gravity="right"
+                        android:maxLength="6"
+                        android:layout_height="wrap_content"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text=" cal"
+                        android:textSize="30pt"
+                        android:textColor="@android:color/black"
+                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        />
+
+                    </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>

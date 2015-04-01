@@ -332,7 +332,7 @@ public class Running extends Activity implements
                             }
                         }
 
-                        if (pace > 0 && totalMilli % mInterval == 0){
+                        if (pace > 0 && mInterval > 0 && totalMilli % mInterval == 0){
                             checkCurrentPace();
                         }
                         if (mMilli == 100) {

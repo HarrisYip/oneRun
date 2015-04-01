@@ -2,10 +2,22 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="0dp"
     android:paddingRight="0dp"
-    android:paddingTop="5dp"
+    android:paddingTop="0dp"
     android:paddingBottom="0dp"
     tools:context="com.onerun.onerun.onerun.Running"
     android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="160dp"
+            android:src="@drawable/seattlehdpi"
+            android:scaleType="centerCrop"/>
+
+        </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -91,15 +103,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="75sp"
+        android:textSize="50sp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:text="Run!"
+        android:text="Go!"
         android:background="@drawable/layer_card_background"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="5dp"
         >
@@ -107,9 +119,8 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight=".5"
             >
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -128,12 +139,7 @@
                 android:textSize="50sp"/>
             </LinearLayout>
 
-            <ImageView
-                android:layout_marginTop="5dp"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:src="@drawable/seattlehdpi"
-                android:scaleType="centerCrop"/>
+
 
             </LinearLayout>
 

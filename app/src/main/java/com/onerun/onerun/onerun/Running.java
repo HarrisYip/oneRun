@@ -472,6 +472,11 @@ public class Running extends Activity implements
         if(runPassBoolean) {
             ServerUtil.endRun(mBtAdapter.getAddress());
             mBtAdapter.cancelDiscovery();
+            try {
+                unregisterReceiver(mReceiver);
+            } catch (Exception e) {
+                // TODO: ignore because onDestroy runs multiple times
+            }
         }
     }
 
@@ -497,6 +502,11 @@ public class Running extends Activity implements
                 if(runPassBoolean) {
                     ServerUtil.endRun(mBtAdapter.getAddress());
                     mBtAdapter.cancelDiscovery();
+                    try {
+                        unregisterReceiver(mReceiver);
+                    } catch (Exception e) {
+                        // TODO: ignore because onDestroy runs multiple times
+                    }
                 }
                 backPressed();
             }

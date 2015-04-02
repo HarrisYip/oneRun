@@ -66,6 +66,7 @@ public class Running extends Activity implements
     // runpass bolean
     boolean runPassBoolean = false;
 
+    TextView mLastRunPassView;
     TextView mLocationTextView;
     TextView mMilliTextView;
     TextView mSecondsTextView;
@@ -266,6 +267,9 @@ public class Running extends Activity implements
 
                         // add runPass person to local db
                         persondb.insertProfile(device.getAddress(), runPassPerson.getName(), runPassPerson.getAge(), runPassPerson.getWeight(), runPassPerson.getHeight(), false);
+                        String speakRunPass = runPassPerson.getName() + " just passed you";
+                        mTts.speak(speakRunPass, mTts.QUEUE_FLUSH, null);
+                        changeRunPass(runPassPerson.getName() + " passed you!");
 
                         // When discovery is finished, change the Activity title
                     } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
@@ -276,6 +280,14 @@ public class Running extends Activity implements
             }).start();
         }
     };
+
+    private void changeRunPass(final String runPassName) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                mLastRunPassView.setText(runPassName);
+            }
+        });
+    }
 
     private void setupDatabases() {
         rundb = new RunDataSource(this);
@@ -380,6 +392,7 @@ public class Running extends Activity implements
     }
 
     private void setupView() {
+        mLastRunPassView = (TextView) findViewById(R.id.lastRunPassView);
         mLocationTextView = (TextView) findViewById(R.id.tView);
         mMilliTextView = (TextView) findViewById(R.id.timeMilliView);
         mSecondsTextView = (TextView) findViewById(R.id.timeSecsView);

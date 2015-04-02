@@ -72,19 +72,19 @@ public class DataAccessHelper extends SQLiteOpenHelper {
         try {
             // create person table
             db.execSQL(CREATE_PERSON_TABLE);
-            ToastMessage.message(currContext, "Creating Person Table...");
+//            ToastMessage.message(currContext, "Creating Person Table...");
 
             // create run table
             db.execSQL(CREATE_RUN_TABLE);
-            ToastMessage.message(currContext, "Creating Run Table...");
+//            ToastMessage.message(currContext, "Creating Run Table...");
 
             // create map table
             db.execSQL(CREATE_MAP_TABLE);
-            ToastMessage.message(currContext, "Creating Map Table...");
+//            ToastMessage.message(currContext, "Creating Map Table...");
 
             // create sport table
             db.execSQL(CREATE_SPORT_TABLE);
-            ToastMessage.message(currContext, "Creating Sport Table...");
+//            ToastMessage.message(currContext, "Creating Sport Table...");
         } catch (Exception e) {
             // TODO: catch errors
             ToastMessage.message(currContext, "FAILED: Creating Tables!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
